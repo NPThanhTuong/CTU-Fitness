@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
 	title: "Sign up",
-	description: "Sign up to become a member",
+	description: "Đăng ký tham gia tập luyện ngay",
 };
 
 function AuthLayout({ children }) {

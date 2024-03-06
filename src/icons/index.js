@@ -229,3 +229,125 @@ export const InstagramIcon = ({
 		</g>
 	</svg>
 );
+
+export const SearchIcon = ({
+	width = "2.4rem",
+	height = "2.4rem",
+	className,
+}) => (
+	<svg
+		width={width}
+		height={height}
+		className={className}
+		viewBox="0 0 24 24"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+		<g
+			id="SVGRepo_tracerCarrier"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		></g>
+		<g id="SVGRepo_iconCarrier">
+			{" "}
+			<path
+				d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+				stroke="currentColor"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			></path>{" "}
+		</g>
+	</svg>
+);
+
+export const ArrowRightIcon = ({
+	width = "2.4rem",
+	height = "2.4rem",
+	className,
+}) => (
+	<svg
+		width={width}
+		height={height}
+		className={className}
+		viewBox="0 0 24 24"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+		<g
+			id="SVGRepo_tracerCarrier"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		></g>
+		<g id="SVGRepo_iconCarrier">
+			{" "}
+			<path
+				d="M4 12H6.5M20 12L14 6M20 12L14 18M20 12H9.5"
+				stroke="currentColor"
+				strokeWidth="1.5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			></path>{" "}
+		</g>
+	</svg>
+);
+
+export const ArrowLeftIcon = ({
+	width = "2.4rem",
+	height = "2.4rem",
+	className,
+}) => (
+	<svg
+		width={width}
+		height={height}
+		className={className}
+		viewBox="0 0 24 24"
+		fill="none"
+		transform="rotate(180)"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+		<g
+			id="SVGRepo_tracerCarrier"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		></g>
+		<g id="SVGRepo_iconCarrier">
+			{" "}
+			<path
+				d="M4 12H6.5M20 12L14 6M20 12L14 18M20 12H9.5"
+				stroke="currentColor"
+				strokeWidth="1.5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			></path>{" "}
+		</g>
+	</svg>
+);
+export const LoadingIcon = ({
+	width = "2.4rem",
+	height = "2.4rem",
+	className,
+}) => (
+	<svg
+		width={width}
+		height={height}
+		className={className}
+		fill="currentColor"
+		viewBox="0 0 32 32"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+		<g
+			id="SVGRepo_tracerCarrier"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		></g>
+		<g id="SVGRepo_iconCarrier">
+			{" "}
+			<path d="M18.91.28a1,1,0,0,0-.82.21,1,1,0,0,0-.36.77V5.45a1,1,0,0,0,.75,1,9.91,9.91,0,1,1-5,0,1,1,0,0,0,.75-1V1.26a1,1,0,0,0-.36-.77,1,1,0,0,0-.82-.21,16,16,0,1,0,5.82,0ZM16,30A14,14,0,0,1,12.27,2.51V4.7a11.91,11.91,0,1,0,7.46,0V2.51A14,14,0,0,1,16,30Z"></path>{" "}
+		</g>
+	</svg>
+);

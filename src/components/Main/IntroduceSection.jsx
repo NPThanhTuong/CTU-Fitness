@@ -16,7 +16,7 @@ function IntroduceSection() {
 					easy with our <span className="text-primary">gym</span>
 				</h2>
 				<Button className="bg-primary px-11 py-5 text-sm hover:scale-105 transition-all">
-					<Link href="/signup">Become a member</Link>
+					<Link href="/signup">Tham gia ngay</Link>
 				</Button>
 			</div>
 		</section>

@@ -1,32 +1,43 @@
 export const webPaths = [
 	{
-		name: "Home",
+		name: "Trang chủ",
 		path: "/",
 		isButton: false,
 	},
 	{
-		name: "Classes",
-		path: "/classes",
+		name: "Huấn luyện viên",
+		path: "/trainers",
 		isButton: false,
 	},
 	{
-		name: "Schedules",
-		path: "/schedules",
+		name: "Thiết bị",
+		path: "/equipments",
 		isButton: false,
 	},
 	{
-		name: "About",
+		name: "Về chúng tôi",
 		path: "/about",
 		isButton: false,
 	},
 	{
-		name: "Contact",
+		name: "Liên hệ",
 		path: "/contact",
 		isButton: false,
 	},
 	{
-		name: "Sign Up",
+		name: "Đăng ký",
 		path: "/signup",
 		isButton: true,
+	},
+];
+
+export const priceSort = [
+	{
+		value: "asc",
+		title: "Giá tăng dần",
+	},
+	{
+		value: "desc",
+		title: "Giá giảm dần",
 	},
 ];

@@ -15,4 +15,11 @@ export {
 	ListItem,
 	Input,
 	Checkbox,
+	Breadcrumbs,
+	Carousel,
+	Tabs,
+	TabsHeader,
+	TabsBody,
+	Tab,
+	TabPanel,
 } from "@material-tailwind/react";

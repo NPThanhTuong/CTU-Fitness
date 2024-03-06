@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Button from "@/components/Button";
 import { IconButton, Collapse, Card } from "@/components/midleExport";
 import { useEffect, useState } from "react";
 import { CloseIcon, MenuBarIcon } from "@/icons";
@@ -18,7 +17,7 @@ function Header() {
 			() => window.innerWidth >= 960 && setOpenNav(false)
 		);
 		window.addEventListener("scroll", () =>
-			setIsScrollDown(window.scrollY > window.outerHeight)
+			setIsScrollDown(window.scrollY > 100)
 		);
 	}, []);
 
@@ -36,7 +35,7 @@ function Header() {
 							href="/"
 							className={twMerge(isScrollDown ? "text-gray-800" : "text-white")}
 						>
-							Training <span className="text-primary">Studio</span>
+							CTU <span className="text-primary">Fitness</span>
 						</Link>
 					</h1>
 					{/* Desktop */}

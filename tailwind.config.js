@@ -18,8 +18,12 @@ module.exports = withMT({
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
 				"gradient-conic":
 					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+				"section-primary": "url('/images/contact-bg.jpg')",
+				"section-secondary": "url('/images/cta-bg.jpg')",
+				"section-third": "url('/images/schedule-bg.jpg')",
+				"section-four": "url('/images/slide-01.jpg')",
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require("@tailwindcss/line-clamp")],
 });
