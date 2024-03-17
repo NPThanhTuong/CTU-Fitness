@@ -15,18 +15,18 @@ function NavList({ className }) {
 					<ListItem
 						key={`${index}_`}
 						className={twMerge(
-							"text-gray-800 justify-center items-center divide-y-2 rounded-md hover:text-white hover:bg-primary hover:bg-opacity-100 flex lg:hidden",
+							"text-gray-800 justify-center items-center divide-y-2 rounded-md hover:text-white hover:bg-primary hover:bg-opacity-100 flex lg:hidden p-0",
 							path.isButton && "orange_gradient text-white",
 							currentPath === path.path && !path.isButton && "text-primary"
 						)}
 					>
-						<Link href={path.path} className="w-full text-center">
+						<Link href={path.path} className="block w-full text-center p-4">
 							{path.name.toUpperCase()}
 						</Link>
 					</ListItem>
 
 					{/* Desktop */}
-					<li
+					<Link
 						key={`${index}__`}
 						className={twMerge(
 							"hidden lg:block lg:text-center lg:text-xs lg:font-semibold lg:p-3 lg:hover:text-primary lg:hover:cursor-pointer lg:transition-all",
@@ -35,9 +35,10 @@ function NavList({ className }) {
 								: "",
 							currentPath === path.path && !path.isButton && "text-primary"
 						)}
+						href={path.path}
 					>
-						<Link href={path.path}>{path.name.toUpperCase()}</Link>
-					</li>
+						{path.name.toUpperCase()}
+					</Link>
 				</div>
 			))}
 		</List>

@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Chức vụ
+model Position {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  description String     @db.VarChar(1024)
+  business    Business[]
+}
+
+// Loại công tác
+model BusinessType {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  description String     @db.VarChar(1024)
+  business    Business[]
+}
+
+// Bộ phận
+model Department {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  description String     @db.VarChar(1024)
+  business    Business[]
+}
+
+// Quyền lợi (Những quyền lợi có được của gói thành viên)
+model Benefit {
+  id                          Int                          @id @default(autoincrement())
+  name                        String                       @db.VarChar(50)
+  description                 String?                      @db.VarChar(1024)
+  benefitOnMembershipPackages BenefitOnMembershipPackage[]
+}
+
+// Gói thành viên
+model MembershipPackage {
+  id                          Int                          @id @default(autoincrement())
+  name                        String                       @db.VarChar(50)
+  description                 String?                      @db.Text
+  shelfLife                   Int
+  price                       Int
+  benefitOnMembershipPackages BenefitOnMembershipPackage[]
+  registerForms               RegisterForm[]
+}
+
+// Quan hệ m-m của Gói thành viên và Quyền lợi
+model BenefitOnMembershipPackage {
+  benefit             Benefit           @relation(fields: [benefitId], references: [id])
+  benefitId           Int
+  membershipPackage   MembershipPackage @relation(fields: [membershipPackageId], references: [id])
+  membershipPackageId Int
+
+  @@id([benefitId, membershipPackageId])
+}
+
+// Phòng tập
+model Facility {
+  id                  Int                  @id @default(autoincrement())
+  address             String               @db.VarChar(50)
+  area                String               @db.VarChar(20)
+  facilityOnCustomers FacilityOnCustomer[]
+  employees           Employee[]
+  equipment           Equipment[]
+}
+
+// Khách hàng
+model Customer {
+  id                  Int                  @id @default(autoincrement())
+  fullname            String               @db.VarChar(50)
+  dayOfBirdth         DateTime             @db.Date
+  cid                 String               @db.VarChar(12)
+  email               String               @db.VarChar(50)
+  phoneNumber         String               @db.VarChar(11)
+  address             String               @db.VarChar(50)
+  facilityOnCustomers FacilityOnCustomer[]
+  registerForms       RegisterForm[]
+}
+
+model FacilityOnCustomer {
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  facility   Facility @relation(fields: [facilityId], references: [id])
+  facilityId Int
+
+  @@id([facilityId, customerId])
+}
+
+// Nhân viên
+model Employee {
+  id             Int              @id @default(autoincrement())
+  fullname       String           @db.VarChar(50)
+  dayOfBirdth    DateTime         @db.Date
+  cid            String           @db.VarChar(12)
+  email          String           @db.VarChar(50)
+  phoneNumber    String           @db.VarChar(11)
+  address        String           @db.VarChar(50)
+  socials        String           @db.VarChar(256)
+  facilityId     Int
+  facility       Facility         @relation(fields: [facilityId], references: [id])
+  registerForm   RegisterForm[]
+  business       Business[]
+  traningSession TraningSession[]
+}
+
+// Phiếu đăng ký gói dịch vụ 
+model RegisterForm {
+  membershipPackage   MembershipPackage @relation(fields: [membershipPackageId], references: [id])
+  membershipPackageId Int
+  customer            Customer          @relation(fields: [customerId], references: [id])
+  customerId          Int
+  employee            Employee          @relation(fields: [employeeId], references: [id])
+  employeeId          Int
+  registerDate        DateTime          @db.Date
+  registerPrice       Int
+  registerExpiryDate  DateTime          @db.Date
+
+  @@id([registerDate, membershipPackageId, customerId, employeeId])
+}
+
+// Công tác
+model Business {
+  employee       Employee     @relation(fields: [employeeId], references: [id])
+  employeeId     Int
+  department     Department   @relation(fields: [departmentId], references: [id])
+  departmentId   Int
+  businessDate   DateTime     @db.Date
+  position       Position     @relation(fields: [positionId], references: [id])
+  positionId     Int
+  businesstype   BusinessType @relation(fields: [businessTypeId], references: [id])
+  businessTypeId Int
+
+  @@id([businessDate, employeeId, departmentId])
+}
+
+// Buổi tập
+model TraningSession {
+  id                        Int                        @id @default(autoincrement())
+  title                     String                     @db.VarChar(256)
+  description               String                     @db.Text
+  employee                  Employee                   @relation(fields: [employeeId], references: [id])
+  employeeId                Int
+  traningSessionOnExercises TraningSessionOnExercise[]
+}
+
+// Bài tập
+model Exercise {
+  id                        Int                        @id @default(autoincrement())
+  title                     String                     @db.VarChar(64)
+  description               String                     @db.Text
+  rep                       Int?
+  time                      Int?
+  illutrations              String                     @db.VarChar(256)
+  traningSessionOnExercises TraningSessionOnExercise[]
+  exerciseOnEquipments      ExerciseOnEquipment[]
+}
+
+// Buổi tập m-m với Bài tập
+model TraningSessionOnExercise {
+  trainingSession   TraningSession @relation(fields: [trainingSessionId], references: [id])
+  trainingSessionId Int
+  exercise          Exercise       @relation(fields: [exerciseId], references: [id])
+  exerciseId        Int
+
+  @@id([trainingSessionId, exerciseId])
+}
+
+// Nhóm cơ
+model Muscle {
+  name               String              @id @db.VarChar(50)
+  description        String              @db.Text
+  image              String              @db.VarChar(256)
+  equipmentOnMuscles EquipmentOnMuscle[]
+}
+
+// Loại thiết bị
+model EquipmentType {
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(50)
+  description String      @db.Text
+  equipments  Equipment[]
+}
+
+// Thiết bị
+model Equipment {
+  id                   Int                   @id @default(autoincrement())
+  name                 String                @db.VarChar(50)
+  importDate           DateTime              @db.Date
+  manufacturingDate    DateTime              @db.Date
+  expiryDate           DateTime              @db.Date
+  price                Int
+  shelfLife            Int
+  origin               String                @db.VarChar(50)
+  distributor          String                @db.VarChar(50)
+  description          String?               @db.Text
+  status               String                @db.VarChar(50)
+  facility             Facility              @relation(fields: [facilityId], references: [id])
+  facilityId           Int
+  equipmentType        EquipmentType         @relation(fields: [equipmentTypeId], references: [id])
+  equipmentTypeId      Int
+  exerciseOnEquipments ExerciseOnEquipment[]
+  equipmentOnMuscles   EquipmentOnMuscle[]
+  corrections          Correction[]
+}
+
+// Bài tập m-m Thiết bị 
+model ExerciseOnEquipment {
+  exerciseId  Int
+  exercise    Exercise  @relation(fields: [exerciseId], references: [id])
+  equipmentId Int
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@id([exerciseId, equipmentId])
+}
+
+// Thiết bị m-m Nhóm cơ
+model EquipmentOnMuscle {
+  equipmentId Int
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  muscleName  String    @db.VarChar(50)
+  muscle      Muscle    @relation(fields: [muscleName], references: [name])
+
+  @@id([equipmentId, muscleName])
+}
+
+// Sửa chữa
+model Correction {
+  equipmentId    Int
+  equipment      Equipment @relation(fields: [equipmentId], references: [id])
+  correctionDate DateTime  @db.Date
+  cost           Int
+  description    String    @db.Text
+
+  @@id([equipmentId, correctionDate])
+}
