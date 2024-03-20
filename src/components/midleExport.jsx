@@ -13,6 +13,7 @@ export {
 	Typography,
 	List,
 	ListItem,
+	ListItemPrefix,
 	Input,
 	Checkbox,
 	Breadcrumbs,
@@ -22,4 +23,7 @@ export {
 	TabsBody,
 	Tab,
 	TabPanel,
+	Drawer,
+	Button,
+	Chip,
 } from "@material-tailwind/react";

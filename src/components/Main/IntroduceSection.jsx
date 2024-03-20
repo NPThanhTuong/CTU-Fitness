@@ -15,9 +15,11 @@ function IntroduceSection() {
 				<h2 className="text-7xl my-9 lg:text-8xl lg:my-10">
 					easy with our <span className="text-primary">gym</span>
 				</h2>
-				<Button className="bg-primary px-11 py-5 text-sm hover:scale-105 transition-all">
-					<Link href="/signup">Tham gia ngay</Link>
-				</Button>
+				<Link href="/signup">
+					<Button className="bg-primary px-11 py-5 text-sm hover:scale-105 transition-all">
+						Tham gia ngay
+					</Button>
+				</Link>
 			</div>
 		</section>
 	);

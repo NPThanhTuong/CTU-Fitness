@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+---
+
+1. Sửa lại lồng ListItem vào trong Link ở Component NavList (checked)
+2. Làm xử lý usePathName cho DrawerItem (checked)
+3. Làm phần Main content (checked)
+
+- Tạo trang xem tất cả người dùng
+- Tạo trang thêm sửa xóa người dùng.
+  . Làm các form
+  . Lấy dữ liệu từ form và lưu vào DB

@@ -106,7 +106,7 @@ function ServiceTabs({ className }) {
 				className={twMerge("hidden lg:block w-full max-w-[980px]", className)}
 			>
 				<Tabs value={activeTab} orientation="vertical" className="flex gap-4">
-					<TabsHeader className="w-60 bg-primary/80">
+					<TabsHeader className="w-60 bg-primary/100">
 						{data.map(({ label, value }) => (
 							<Tab
 								key={value}
@@ -136,7 +136,7 @@ function ServiceTabs({ className }) {
 			{/* Mobile */}
 			<div className={twMerge("block lg:hidden w-full", className)}>
 				<Tabs value={activeTab} className="flex flex-col gap-5">
-					<TabsHeader className="w-full bg-primary/80">
+					<TabsHeader className="w-full bg-primary/100">
 						{data.map(({ label, value }) => (
 							<Tab
 								key={value}

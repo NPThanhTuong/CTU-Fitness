@@ -12,18 +12,17 @@ function NavList({ className }) {
 			{webPaths.map((path, index) => (
 				<div key={index}>
 					{/* Mobile */}
-					<ListItem
-						key={`${index}_`}
+					<Link
+						href={path.path}
+						key={index}
 						className={twMerge(
-							"text-gray-800 justify-center items-center divide-y-2 rounded-md hover:text-white hover:bg-primary hover:bg-opacity-100 flex lg:hidden p-0",
+							"text-gray-800 justify-center items-center divide-y-2 rounded-md hover:text-white hover:bg-primary hover:bg-opacity-100 flex lg:hidden p-4 w-full ",
 							path.isButton && "orange_gradient text-white",
 							currentPath === path.path && !path.isButton && "text-primary"
 						)}
 					>
-						<Link href={path.path} className="block w-full text-center p-4">
-							{path.name.toUpperCase()}
-						</Link>
-					</ListItem>
+						{path.name.toUpperCase()}
+					</Link>
 
 					{/* Desktop */}
 					<Link
