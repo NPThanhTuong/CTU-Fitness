@@ -1,12 +1,11 @@
 "use client";
 
-import { MenuBarIcon, SearchIcon } from "@/icons";
+import { SearchIcon } from "@/icons";
 import { Input } from "@material-tailwind/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
 function Search({ label, className }) {
-	// const [searchText, setSearchText] = useState("");
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const pathName = usePathname();
