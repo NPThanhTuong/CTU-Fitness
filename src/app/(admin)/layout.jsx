@@ -44,6 +44,14 @@ function AdminLayout({ children }) {
 			textLink: "Người dùng",
 		},
 		{
+			href: "/admin/users/create",
+			textLink: "Thêm người dùng",
+		},
+		{
+			href: "/admin/users/edit",
+			textLink: "Chỉnh sửa người dùng",
+		},
+		{
 			href: "/admin/equipments",
 			textLink: "Thiết bị",
 		},

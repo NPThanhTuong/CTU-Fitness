@@ -8,97 +8,30 @@ import {
 	TabPanel,
 } from "@/components/midleExport";
 import ServiceItem from "./ServiceItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 function ServiceTabs({ className }) {
-	const [activeTab, setActiveTab] = useState("one-month");
-	const data = [
-		{
-			label: "Gói 1 tháng",
-			value: "one-month",
-			image: "/images/training-image-02.jpg",
-			benefits: [
-				{
-					desc: "Giá hợp lý",
+	const [activeTab, setActiveTab] = useState(1);
+	const [membershipPackages, setMembershipPackages] = useState([]);
+
+	useEffect(() => {
+		const getMembershipPackages = async () => {
+			const res = await fetch("/api/service-packages", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
 				},
-				{
-					desc: "Thanh toán hàng tháng",
-				},
-				{
-					desc: "Tập luyện không giới hạn thời gian",
-				},
-				{
-					desc: "Gửi xe miễn phí",
-				},
-				{
-					desc: "Lớp học miễn phí",
-				},
-				{
-					desc: "Nước uống miễn phí",
-				},
-				{
-					desc: "Buổi tập PT miễn phí",
-				},
-			],
-		},
-		{
-			label: "Gói 6 tháng",
-			value: "six-month",
-			image: "/images/training-image-03.jpg",
-			benefits: [
-				{
-					desc: "Giá hợp lý",
-				},
-				{
-					desc: "Thanh toán hàng tháng",
-				},
-				{
-					desc: "Tập luyện không giới hạn thời gian",
-				},
-				{
-					desc: "Gửi xe miễn phí",
-				},
-				{
-					desc: "Lớp học miễn phí",
-				},
-				{
-					desc: "Nước uống miễn phí",
-				},
-				{
-					desc: "Buổi tập PT miễn phí",
-				},
-			],
-		},
-		{
-			label: "Gói 12 tháng",
-			value: "twenty-month",
-			image: "/images/training-image-04.jpg",
-			benefits: [
-				{
-					desc: "Giá hợp lý",
-				},
-				{
-					desc: "Thanh toán hàng tháng",
-				},
-				{
-					desc: "Tập luyện không giới hạn thời gian",
-				},
-				{
-					desc: "Gửi xe miễn phí",
-				},
-				{
-					desc: "Lớp học miễn phí",
-				},
-				{
-					desc: "Nước uống miễn phí",
-				},
-				{
-					desc: "Buổi tập PT miễn phí",
-				},
-			],
-		},
-	];
+			});
+
+			const data = await res.json();
+			console.log({ data });
+			setMembershipPackages(data);
+		};
+
+		getMembershipPackages();
+	}, []);
+
 	return (
 		<>
 			{/* Desktop */}
@@ -107,28 +40,34 @@ function ServiceTabs({ className }) {
 			>
 				<Tabs value={activeTab} orientation="vertical" className="flex gap-4">
 					<TabsHeader className="w-60 bg-primary/100">
-						{data.map(({ label, value }) => (
+						{membershipPackages.map(({ name, id }) => (
 							<Tab
-								key={value}
-								value={value}
-								onClick={() => setActiveTab(value)}
+								key={id}
+								value={id}
+								onClick={() => setActiveTab(id)}
 								className={twMerge(
-									activeTab === value
+									activeTab === id
 										? "text-primary transition delay-200"
 										: "text-white",
 									"py-8 text-xl uppercase font-bold"
 								)}
 							>
-								{label}
+								{name}
 							</Tab>
 						))}
 					</TabsHeader>
 					<TabsBody>
-						{data.map(({ value, label, image, benefits }) => (
-							<TabPanel key={value} value={value} className="py-0">
-								<ServiceItem image={image} title={label} benefits={benefits} />
-							</TabPanel>
-						))}
+						{membershipPackages.map(
+							({ id, name, coverImage, benefitOnMembershipPackages }) => (
+								<TabPanel key={id} value={id} className="py-0">
+									<ServiceItem
+										image={`/images/${coverImage}`}
+										title={name}
+										benefits={benefitOnMembershipPackages}
+									/>
+								</TabPanel>
+							)
+						)}
 					</TabsBody>
 				</Tabs>
 			</div>
@@ -137,27 +76,33 @@ function ServiceTabs({ className }) {
 			<div className={twMerge("block lg:hidden w-full", className)}>
 				<Tabs value={activeTab} className="flex flex-col gap-5">
 					<TabsHeader className="w-full bg-primary/100">
-						{data.map(({ label, value }) => (
+						{membershipPackages.map(({ name, id }) => (
 							<Tab
-								key={value}
-								value={value}
-								onClick={() => setActiveTab(value)}
+								key={id}
+								value={id}
+								onClick={() => setActiveTab(id)}
 								className={
-									activeTab === value
+									activeTab === id
 										? "text-primary transition-all delay-200"
 										: "text-white"
 								}
 							>
-								{label}
+								{name}
 							</Tab>
 						))}
 					</TabsHeader>
 					<TabsBody>
-						{data.map(({ value, label, image, benefits }) => (
-							<TabPanel key={value} value={value} className="py-0">
-								<ServiceItem image={image} title={label} benefits={benefits} />
-							</TabPanel>
-						))}
+						{membershipPackages.map(
+							({ id, name, coverImage, benefitOnMembershipPackages }) => (
+								<TabPanel key={id} value={id} className="py-0">
+									<ServiceItem
+										image={`/images/${coverImage}`}
+										title={name}
+										benefits={benefitOnMembershipPackages}
+									/>
+								</TabPanel>
+							)
+						)}
 					</TabsBody>
 				</Tabs>
 			</div>

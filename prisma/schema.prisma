@@ -7,93 +7,79 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Chức vụ
-model Position {
-  id          Int        @id @default(autoincrement())
-  name        String     @db.VarChar(50)
-  description String     @db.VarChar(1024)
-  business    Business[]
+model benefit {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @db.VarChar(50)
+  description                String?                      @db.VarChar(1024)
+  benefitonmembershippackage benefitonmembershippackage[]
 }
 
-// Loại công tác
-model BusinessType {
-  id          Int        @id @default(autoincrement())
-  name        String     @db.VarChar(50)
-  description String     @db.VarChar(1024)
-  business    Business[]
-}
-
-// Bộ phận
-model Department {
-  id          Int        @id @default(autoincrement())
-  name        String     @db.VarChar(50)
-  description String     @db.VarChar(1024)
-  business    Business[]
-}
-
-// Quyền lợi (Những quyền lợi có được của gói thành viên)
-model Benefit {
-  id                          Int                          @id @default(autoincrement())
-  name                        String                       @db.VarChar(50)
-  description                 String?                      @db.VarChar(1024)
-  benefitOnMembershipPackages BenefitOnMembershipPackage[]
-}
-
-// Gói thành viên
-model MembershipPackage {
-  id                          Int                          @id @default(autoincrement())
-  name                        String                       @db.VarChar(50)
-  description                 String?                      @db.Text
-  shelfLife                   Int
-  price                       Int
-  benefitOnMembershipPackages BenefitOnMembershipPackage[]
-  registerForms               RegisterForm[]
-}
-
-// Quan hệ m-m của Gói thành viên và Quyền lợi
-model BenefitOnMembershipPackage {
-  benefit             Benefit           @relation(fields: [benefitId], references: [id])
+model benefitonmembershippackage {
   benefitId           Int
-  membershipPackage   MembershipPackage @relation(fields: [membershipPackageId], references: [id])
   membershipPackageId Int
+  benefit             benefit           @relation(fields: [benefitId], references: [id], map: "BenefitOnMembershipPackage_benefitId_fkey")
+  membershippackage   membershippackage @relation(fields: [membershipPackageId], references: [id], map: "BenefitOnMembershipPackage_membershipPackageId_fkey")
 
   @@id([benefitId, membershipPackageId])
+  @@index([membershipPackageId], map: "BenefitOnMembershipPackage_membershipPackageId_fkey")
 }
 
-// Phòng tập
-model Facility {
-  id                  Int                  @id @default(autoincrement())
-  address             String               @db.VarChar(50)
-  area                String               @db.VarChar(20)
-  facilityOnCustomers FacilityOnCustomer[]
-  employees           Employee[]
-  equipment           Equipment[]
+model business {
+  employeeId     Int
+  departmentId   Int
+  businessDate   DateTime     @db.Date
+  positionId     Int
+  businessTypeId Int
+  businesstype   businesstype @relation(fields: [businessTypeId], references: [id], map: "Business_businessTypeId_fkey")
+  department     department   @relation(fields: [departmentId], references: [id], map: "Business_departmentId_fkey")
+  employee       employee     @relation(fields: [employeeId], references: [id], map: "Business_employeeId_fkey")
+  position       position     @relation(fields: [positionId], references: [id], map: "Business_positionId_fkey")
+
+  @@id([businessDate, employeeId, departmentId])
+  @@index([businessTypeId], map: "Business_businessTypeId_fkey")
+  @@index([departmentId], map: "Business_departmentId_fkey")
+  @@index([employeeId], map: "Business_employeeId_fkey")
+  @@index([positionId], map: "Business_positionId_fkey")
 }
 
-// Khách hàng
-model Customer {
-  id                  Int                  @id @default(autoincrement())
-  fullname            String               @db.VarChar(50)
-  dayOfBirdth         DateTime             @db.Date
-  cid                 String               @db.VarChar(12)
-  email               String               @db.VarChar(50)
-  phoneNumber         String               @db.VarChar(11)
-  address             String               @db.VarChar(50)
-  facilityOnCustomers FacilityOnCustomer[]
-  registerForms       RegisterForm[]
+model businesstype {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  description String     @db.VarChar(1024)
+  business    business[]
 }
 
-model FacilityOnCustomer {
-  customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int
-  facility   Facility @relation(fields: [facilityId], references: [id])
-  facilityId Int
+model correction {
+  equipmentId    Int
+  correctionDate DateTime  @db.Date
+  cost           Int
+  description    String    @db.Text
+  equipment      equipment @relation(fields: [equipmentId], references: [id], map: "Correction_equipmentId_fkey")
 
-  @@id([facilityId, customerId])
+  @@id([equipmentId, correctionDate])
 }
 
-// Nhân viên
-model Employee {
+model customer {
+  id                 Int                  @id @default(autoincrement())
+  fullname           String               @db.VarChar(50)
+  dayOfBirdth        DateTime             @db.Date
+  cid                String               @db.VarChar(12)
+  email              String               @db.VarChar(50)
+  phoneNumber        String               @db.VarChar(11)
+  address            String               @db.VarChar(50)
+  paymentStatus      Boolean              @default(false)
+  facilityoncustomer facilityoncustomer[]
+  registerform       registerform[]
+}
+
+model department {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  description String     @db.VarChar(1024)
+  business    business[]
+}
+
+model employee {
   id             Int              @id @default(autoincrement())
   fullname       String           @db.VarChar(50)
   dayOfBirdth    DateTime         @db.Date
@@ -103,139 +89,169 @@ model Employee {
   address        String           @db.VarChar(50)
   socials        String           @db.VarChar(256)
   facilityId     Int
-  facility       Facility         @relation(fields: [facilityId], references: [id])
-  registerForm   RegisterForm[]
-  business       Business[]
-  traningSession TraningSession[]
+  avatar         String           @default("no-avatar.jpg") @db.VarChar(256)
+  description    String           @default("Mô tả của nhân viên") @db.VarChar(4096)
+  experience     String           @default("1 năm") @db.VarChar(32)
+  business       business[]
+  facility       facility         @relation(fields: [facilityId], references: [id], map: "Employee_facilityId_fkey")
+  registerform   registerform[]
+  traningsession traningsession[]
+
+  @@index([facilityId], map: "Employee_facilityId_fkey")
 }
 
-// Phiếu đăng ký gói dịch vụ 
-model RegisterForm {
-  membershipPackage   MembershipPackage @relation(fields: [membershipPackageId], references: [id])
+model equipment {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(50)
+  importDate          DateTime              @db.Date
+  manufacturingDate   DateTime              @db.Date
+  expiryDate          DateTime              @db.Date
+  price               Int
+  shelfLife           Int
+  origin              String                @db.VarChar(50)
+  distributor         String                @db.VarChar(50)
+  description         String?               @db.Text
+  status              Boolean               @default(false)
+  facilityId          Int
+  equipmentTypeId     Int
+  quantity            Int                   @default(1)
+  correction          correction[]
+  equipmenttype       equipmenttype         @relation(fields: [equipmentTypeId], references: [id], map: "Equipment_equipmentTypeId_fkey")
+  facility            facility              @relation(fields: [facilityId], references: [id], map: "Equipment_facilityId_fkey")
+  equipmentimage      equipmentimage[]
+  equipmentonmuscle   equipmentonmuscle[]
+  exerciseonequipment exerciseonequipment[]
+
+  @@index([equipmentTypeId], map: "Equipment_equipmentTypeId_fkey")
+  @@index([facilityId], map: "Equipment_facilityId_fkey")
+}
+
+model equipmentimage {
+  pathName    String    @id @db.VarChar(256)
+  equipmentId Int
+  equipment   equipment @relation(fields: [equipmentId], references: [id], map: "EquipmentImage_equipmentId_fkey")
+
+  @@index([equipmentId], map: "EquipmentImage_equipmentId_fkey")
+}
+
+model equipmentonmuscle {
+  equipmentId Int
+  muscleName  String    @db.VarChar(50)
+  equipment   equipment @relation(fields: [equipmentId], references: [id], map: "EquipmentOnMuscle_equipmentId_fkey")
+  muscle      muscle    @relation(fields: [muscleName], references: [name], map: "EquipmentOnMuscle_muscleName_fkey")
+
+  @@id([equipmentId, muscleName])
+  @@index([muscleName], map: "EquipmentOnMuscle_muscleName_fkey")
+}
+
+model equipmenttype {
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(50)
+  description String      @db.Text
+  equipment   equipment[]
+}
+
+model exercise {
+  id                       Int                        @id @default(autoincrement())
+  title                    String                     @db.VarChar(64)
+  description              String                     @db.Text
+  rep                      Int?
+  time                     Int?
+  illutrations             String                     @db.VarChar(256)
+  set                      Int?                       @default(3)
+  exerciseonequipment      exerciseonequipment[]
+  traningsessiononexercise traningsessiononexercise[]
+}
+
+model exerciseonequipment {
+  exerciseId  Int
+  equipmentId Int
+  equipment   equipment @relation(fields: [equipmentId], references: [id], map: "ExerciseOnEquipment_equipmentId_fkey")
+  exercise    exercise  @relation(fields: [exerciseId], references: [id], map: "ExerciseOnEquipment_exerciseId_fkey")
+
+  @@id([exerciseId, equipmentId])
+  @@index([equipmentId], map: "ExerciseOnEquipment_equipmentId_fkey")
+}
+
+model facility {
+  id                 Int                  @id @default(autoincrement())
+  address            String               @db.VarChar(50)
+  area               String               @db.VarChar(20)
+  employee           employee[]
+  equipment          equipment[]
+  facilityoncustomer facilityoncustomer[]
+}
+
+model facilityoncustomer {
+  customerId Int
+  facilityId Int
+  customer   customer @relation(fields: [customerId], references: [id], map: "FacilityOnCustomer_customerId_fkey")
+  facility   facility @relation(fields: [facilityId], references: [id], map: "FacilityOnCustomer_facilityId_fkey")
+
+  @@id([facilityId, customerId])
+  @@index([customerId], map: "FacilityOnCustomer_customerId_fkey")
+}
+
+model membershippackage {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @db.VarChar(50)
+  description                String?                      @db.Text
+  shelfLife                  Int
+  price                      Int
+  coverImage                 String                       @default("cover-image.jpg") @db.VarChar(256)
+  benefitonmembershippackage benefitonmembershippackage[]
+  registerform               registerform[]
+}
+
+model muscle {
+  name              String              @id @db.VarChar(50)
+  description       String              @db.Text
+  image             String              @db.VarChar(256)
+  equipmentonmuscle equipmentonmuscle[]
+}
+
+model position {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  description String     @db.VarChar(1024)
+  business    business[]
+}
+
+model registerform {
   membershipPackageId Int
-  customer            Customer          @relation(fields: [customerId], references: [id])
   customerId          Int
-  employee            Employee          @relation(fields: [employeeId], references: [id])
   employeeId          Int
   registerDate        DateTime          @db.Date
   registerPrice       Int
   registerExpiryDate  DateTime          @db.Date
+  customer            customer          @relation(fields: [customerId], references: [id], map: "RegisterForm_customerId_fkey")
+  employee            employee          @relation(fields: [employeeId], references: [id], map: "RegisterForm_employeeId_fkey")
+  membershippackage   membershippackage @relation(fields: [membershipPackageId], references: [id], map: "RegisterForm_membershipPackageId_fkey")
 
   @@id([registerDate, membershipPackageId, customerId, employeeId])
+  @@index([customerId], map: "RegisterForm_customerId_fkey")
+  @@index([employeeId], map: "RegisterForm_employeeId_fkey")
+  @@index([membershipPackageId], map: "RegisterForm_membershipPackageId_fkey")
 }
 
-// Công tác
-model Business {
-  employee       Employee     @relation(fields: [employeeId], references: [id])
-  employeeId     Int
-  department     Department   @relation(fields: [departmentId], references: [id])
-  departmentId   Int
-  businessDate   DateTime     @db.Date
-  position       Position     @relation(fields: [positionId], references: [id])
-  positionId     Int
-  businesstype   BusinessType @relation(fields: [businessTypeId], references: [id])
-  businessTypeId Int
+model traningsession {
+  id                       Int                        @id @default(autoincrement())
+  title                    String                     @db.VarChar(256)
+  description              String                     @db.Text
+  employeeId               Int
+  coverImage               String                     @db.VarChar(256)
+  employee                 employee                   @relation(fields: [employeeId], references: [id], map: "TraningSession_employeeId_fkey")
+  traningsessiononexercise traningsessiononexercise[]
 
-  @@id([businessDate, employeeId, departmentId])
+  @@index([employeeId], map: "TraningSession_employeeId_fkey")
 }
 
-// Buổi tập
-model TraningSession {
-  id                        Int                        @id @default(autoincrement())
-  title                     String                     @db.VarChar(256)
-  description               String                     @db.Text
-  employee                  Employee                   @relation(fields: [employeeId], references: [id])
-  employeeId                Int
-  traningSessionOnExercises TraningSessionOnExercise[]
-}
-
-// Bài tập
-model Exercise {
-  id                        Int                        @id @default(autoincrement())
-  title                     String                     @db.VarChar(64)
-  description               String                     @db.Text
-  rep                       Int?
-  time                      Int?
-  illutrations              String                     @db.VarChar(256)
-  traningSessionOnExercises TraningSessionOnExercise[]
-  exerciseOnEquipments      ExerciseOnEquipment[]
-}
-
-// Buổi tập m-m với Bài tập
-model TraningSessionOnExercise {
-  trainingSession   TraningSession @relation(fields: [trainingSessionId], references: [id])
+model traningsessiononexercise {
   trainingSessionId Int
-  exercise          Exercise       @relation(fields: [exerciseId], references: [id])
   exerciseId        Int
+  exercise          exercise       @relation(fields: [exerciseId], references: [id], map: "TraningSessionOnExercise_exerciseId_fkey")
+  traningsession    traningsession @relation(fields: [trainingSessionId], references: [id], map: "TraningSessionOnExercise_trainingSessionId_fkey")
 
   @@id([trainingSessionId, exerciseId])
-}
-
-// Nhóm cơ
-model Muscle {
-  name               String              @id @db.VarChar(50)
-  description        String              @db.Text
-  image              String              @db.VarChar(256)
-  equipmentOnMuscles EquipmentOnMuscle[]
-}
-
-// Loại thiết bị
-model EquipmentType {
-  id          Int         @id @default(autoincrement())
-  name        String      @db.VarChar(50)
-  description String      @db.Text
-  equipments  Equipment[]
-}
-
-// Thiết bị
-model Equipment {
-  id                   Int                   @id @default(autoincrement())
-  name                 String                @db.VarChar(50)
-  importDate           DateTime              @db.Date
-  manufacturingDate    DateTime              @db.Date
-  expiryDate           DateTime              @db.Date
-  price                Int
-  shelfLife            Int
-  origin               String                @db.VarChar(50)
-  distributor          String                @db.VarChar(50)
-  description          String?               @db.Text
-  status               String                @db.VarChar(50)
-  facility             Facility              @relation(fields: [facilityId], references: [id])
-  facilityId           Int
-  equipmentType        EquipmentType         @relation(fields: [equipmentTypeId], references: [id])
-  equipmentTypeId      Int
-  exerciseOnEquipments ExerciseOnEquipment[]
-  equipmentOnMuscles   EquipmentOnMuscle[]
-  corrections          Correction[]
-}
-
-// Bài tập m-m Thiết bị 
-model ExerciseOnEquipment {
-  exerciseId  Int
-  exercise    Exercise  @relation(fields: [exerciseId], references: [id])
-  equipmentId Int
-  equipment   Equipment @relation(fields: [equipmentId], references: [id])
-
-  @@id([exerciseId, equipmentId])
-}
-
-// Thiết bị m-m Nhóm cơ
-model EquipmentOnMuscle {
-  equipmentId Int
-  equipment   Equipment @relation(fields: [equipmentId], references: [id])
-  muscleName  String    @db.VarChar(50)
-  muscle      Muscle    @relation(fields: [muscleName], references: [name])
-
-  @@id([equipmentId, muscleName])
-}
-
-// Sửa chữa
-model Correction {
-  equipmentId    Int
-  equipment      Equipment @relation(fields: [equipmentId], references: [id])
-  correctionDate DateTime  @db.Date
-  cost           Int
-  description    String    @db.Text
-
-  @@id([equipmentId, correctionDate])
+  @@index([exerciseId], map: "TraningSessionOnExercise_exerciseId_fkey")
 }

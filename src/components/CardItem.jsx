@@ -11,6 +11,7 @@ import { FacebookIcon, InstagramIcon, TwitterIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 function CardItem({
+	id,
 	className,
 	srcImg,
 	category,
@@ -69,10 +70,7 @@ function CardItem({
 						</Typography>
 					</Tooltip>
 				</div>
-				<Link
-					href="/trainers/idTrainer"
-					className="text-primary hover:underline"
-				>
+				<Link href={`/trainers/${id}`} className="text-primary hover:underline">
 					Chi tiết <span className="text-primary">&#10140;</span>
 				</Link>
 			</CardFooter>

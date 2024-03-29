@@ -18,7 +18,7 @@ function ServiceItem({ image, title, benefits }) {
 			</h3>
 
 			<ul className="text-white pl-4">
-				{benefits.map((benefit, index) => (
+				{benefits.map(({ benefit }, index) => (
 					<li key={index} className="flex gap-3 my-3">
 						<Image
 							src="/images/icons/gym.png"
@@ -27,7 +27,7 @@ function ServiceItem({ image, title, benefits }) {
 							alt="bullet list icon"
 							className="size-auto"
 						/>
-						<span>{benefit.desc}</span>
+						<span>{benefit.name}</span>
 					</li>
 				))}
 			</ul>

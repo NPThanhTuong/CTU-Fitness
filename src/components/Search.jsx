@@ -15,6 +15,7 @@ function Search({ label, className }) {
 		const params = new URLSearchParams(searchParams);
 		if (searchTerm) {
 			params.set("query", searchTerm);
+			params.delete("page");
 		} else {
 			params.delete("query");
 		}

@@ -1,16 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-function DefaultPagination() {
+function DefaultPagination({ totalPage }) {
 	// const [active, setActive] = React.useState(1);
 	const router = useRouter();
 	const pathName = usePathname();
 	const searchParams = useSearchParams();
-	const numPages = 5;
+	const numPages = totalPage;
 	const params = new URLSearchParams(searchParams);
 	const currPage = parseInt(searchParams.get("page")) || 1;
 
@@ -46,11 +46,11 @@ function DefaultPagination() {
 				<ArrowLeftIcon /> Previous
 			</Button>
 			<div className="flex items-center gap-2">
-				<IconButton {...getItemProps(1)}>1</IconButton>
-				<IconButton {...getItemProps(2)}>2</IconButton>
-				<IconButton {...getItemProps(3)}>3</IconButton>
-				<IconButton {...getItemProps(4)}>4</IconButton>
-				<IconButton {...getItemProps(5)}>5</IconButton>
+				{[...Array(totalPage)].map((el, index) => (
+					<IconButton key={index} {...getItemProps(index + 1)}>
+						{index + 1}
+					</IconButton>
+				))}
 			</div>
 			<Button
 				variant="text"

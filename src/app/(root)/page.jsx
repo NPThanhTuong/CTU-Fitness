@@ -19,64 +19,10 @@ import ServiceItem from "@/components/Main/ServiceItem";
 import ServiceTabs from "@/components/Main/ServicesTabs";
 import CardItem from "@/components/CardItem";
 import TraningEquipmentItem from "@/components/Main/TraningEquipmentItem";
+import TraningEquipmentHighlight from "@/components/Main/TraningEquipmentHighlight";
+import TrainerHighlightList from "@/components/Main/TrainerHighlightList";
 
 export default function Home() {
-	const data = [
-		{
-			id: 1,
-			title: "Tạ đơn",
-			image: "/images/dumbbells.png",
-			muscles: [
-				{
-					icon: "/images/icons/006-biceps.png",
-					title: "Cơ bắp tay",
-				},
-				{
-					icon: "/images/icons/007-gym.png",
-					title: "Cơ ngực",
-				},
-				{
-					icon: "/images/icons/001-shoulder.png",
-					title: "Cơ vai",
-				},
-			],
-		},
-		{
-			id: 2,
-
-			title: "Máy chạy bộ",
-			image: "/images/may-chay-bo.jpg",
-			muscles: [
-				{
-					icon: "/images/icons/013-muscles-3.png",
-					title: "Cơ chân",
-				},
-				{
-					icon: "/images/icons/heart-rate.png",
-					title: "Tim mạch",
-				},
-			],
-		},
-		{
-			id: 3,
-			title: "Máy Smith",
-			image: "/images/ktpgym21.jpg",
-			muscles: [
-				{
-					icon: "/images/icons/013-muscles-3.png",
-					title: "Cơ chân",
-				},
-				{
-					icon: "/images/icons/009-front.png",
-					title: "Cơ đùi",
-				},
-				{
-					icon: "/images/icons/007-gym.png",
-					title: "Cơ ngực",
-				},
-			],
-		},
-	];
 	return (
 		<main className="">
 			<IntroduceSection />
@@ -151,7 +97,7 @@ export default function Home() {
 					/>
 					<IntroduceItem
 						image="/images/ktpgym10.jpg"
-						title="Được hưỡng dẫn chuẩn xác"
+						title="Được hướng dẫn chuẩn xác"
 						desc="Chúng tôi quan niệm rằng không có bất cứ một khoản đầu tư nào quý giá hơn đầu tư cho chính bản thân. Khi đầu tư một cách đúng đắn cho việc tập luyện, những lợi ích mà khách hàng nhận được không chỉ là kết quả mang tính thẩm mỹ về mặt hình thể, mà hơn hết sức khỏe, lối sống cũng"
 					/>
 					<IntroduceItem
@@ -161,7 +107,7 @@ export default function Home() {
 					/>
 					<IntroduceItem
 						image="/images/ktpgym18.jpg"
-						title="Được hưỡng dẫn chuẩn xác"
+						title="Được hướng dẫn chuẩn xác"
 						desc="Chúng tôi quan niệm rằng không có bất cứ một khoản đầu tư nào quý giá hơn đầu tư cho chính bản thân. Khi đầu tư một cách đúng đắn cho việc tập luyện, những lợi ích mà khách hàng nhận được không chỉ là kết quả mang tính thẩm mỹ về mặt hình thể, mà hơn hết sức khỏe, lối sống cũng"
 					/>
 				</div>
@@ -359,16 +305,8 @@ export default function Home() {
 						</p>
 					</div>
 				</div>
-				<div className="grid grid-cols-1 gap-32 mb-28 lg:grid-cols-3 mt-12">
-					{data.map((item) => (
-						<TraningEquipmentItem
-							key={item.id}
-							title={item.title}
-							image={item.image}
-							muscles={item.muscles}
-						/>
-					))}
-				</div>
+
+				<TraningEquipmentHighlight className="grid grid-cols-1 gap-32 mb-28 lg:grid-cols-3 mt-12" />
 			</PrimarySection>
 			<SecondarySection bgImage="bg-section-third">
 				<h2 className="uppercase text-white text-4xl font-bold text-center">
@@ -385,35 +323,7 @@ export default function Home() {
 				}
 				desc="Luôn luôn chia sẻ, quan tâm tận tình với học viên. Đưa ra những bài tập tối ưu nhất."
 			>
-				<div className="grid grid-cols-1 gap-5 lg:grid-cols-3 mt-14">
-					<CardItem
-						srcImg="/images/first-trainer.jpg"
-						title="Thanh Tường"
-						category="Strength Trainer"
-						desc="Đây là mô tả về trainer, có thể có 1 vài thông tin hữu ích những cũng có thể không."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
-					<CardItem
-						srcImg="/images/first-trainer.jpg"
-						title="Thanh Tường"
-						category="Strength Trainer"
-						desc="Đây là mô tả về trainer, có thể có 1 vài thông tin hữu ích những cũng có thể không."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
-					<CardItem
-						srcImg="/images/first-trainer.jpg"
-						title="Thanh Tường"
-						category="Strength Trainer"
-						desc="Đây là mô tả về trainer, có thể có 1 vài thông tin hữu ích những cũng có thể không."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
-				</div>
+				<TrainerHighlightList className="grid grid-cols-1 gap-5 lg:grid-cols-3 mt-14"></TrainerHighlightList>
 				<div className="flex justify-center">
 					<Link
 						href="/trainers"

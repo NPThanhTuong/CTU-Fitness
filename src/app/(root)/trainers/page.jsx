@@ -1,13 +1,44 @@
 "use client";
+
 import CardItem from "@/components/CardItem";
 import DefaultPagination from "@/components/DefaultPagination";
+import TrainerList from "@/components/Main/TrainerList";
 import Search from "@/components/Search";
 import Sort from "@/components/Sort";
 import { Breadcrumbs } from "@/components/midleExport";
 import { priceSort } from "@/utils/constants";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function TrainersPage() {
+	const [trainers, setTrainers] = useState([]);
+	const [totalPage, setTotalPage] = useState(1);
+	const searchParams = useSearchParams();
+	const params = new URLSearchParams(searchParams);
+
+	useEffect(() => {
+		const getTrainers = async () => {
+			const res = await fetch(
+				`/api/trainers?query=${params.get("query") || ""}&expSort=${
+					params.get("expSort") || "asc"
+				}&page=${params.get("page") || 1}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+
+			const { data, totalPage } = await res.json();
+			console.log({ data, totalPage });
+			setTrainers(data);
+			setTotalPage(totalPage);
+		};
+
+		getTrainers();
+	}, [params.get("query"), params.get("expSort"), params.get("page")]);
 	return (
 		<main>
 			<div className="h-[80px] bg-[#27313b]"></div>
@@ -24,58 +55,21 @@ function TrainersPage() {
 				</div>
 
 				<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-					<CardItem
-						className=""
-						srcImg="/images/first-trainer.jpg"
-						category="Flexible Trainer"
-						title="Thanh Tuong"
-						desc="Bitters cliche tattooed 8-bit distillery mustache. Keytar
-									succulents gluten-free vegan church-key pour-over seitan
-									flannel."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
-					<CardItem
-						className=""
-						srcImg="/images/first-trainer.jpg"
-						category="Flexible Trainer"
-						title="Thanh Tuong"
-						desc="Bitters cliche tattooed 8-bit distillery mustache. Keytar
-									succulents gluten-free vegan church-key pour-over seitan
-									flannel."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
-					<CardItem
-						className=""
-						srcImg="/images/first-trainer.jpg"
-						category="Flexible Trainer"
-						title="Thanh Tuong"
-						desc="Bitters cliche tattooed 8-bit distillery mustache. Keytar
-									succulents gluten-free vegan church-key pour-over seitan
-									flannel."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
-					<CardItem
-						className=""
-						srcImg="/images/first-trainer.jpg"
-						category="Flexible Trainer"
-						title="Thanh Tuong"
-						desc="Bitters cliche tattooed 8-bit distillery mustache. Keytar
-									succulents gluten-free vegan church-key pour-over seitan
-									flannel."
-						linkFb="#"
-						linkTwitter="#"
-						linkIg="#"
-					/>
+					{trainers.map((item) => (
+						<CardItem
+							key={item.employeeId}
+							srcImg={`/images/${item.employee.avatar}`}
+							category={item.position.name}
+							title={item.employee.fullname}
+							desc={item.employee.description}
+							linkFb="#"
+							linkTwitter="#"
+							linkIg="#"
+						/>
+					))}
 				</div>
-
 				<div className="flex justify-center mt-10">
-					<DefaultPagination />
+					<DefaultPagination totalPage={totalPage} />
 				</div>
 			</div>
 		</main>
