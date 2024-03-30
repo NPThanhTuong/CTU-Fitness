@@ -11,6 +11,7 @@ function Sort({ sortValues, label, className, sortType }) {
 		const params = new URLSearchParams(searchParams);
 		if (value) {
 			params.set(sortType, value);
+			params.delete("page");
 		} else {
 			params.delete(sortType);
 		}
@@ -23,6 +24,7 @@ function Sort({ sortValues, label, className, sortType }) {
 			defaultValue={searchParams.get(sortType)?.toString()}
 			onChange={handleSorting}
 			className={className}
+			color="deep-orange"
 		>
 			{sortValues.map((sortValue) => (
 				<Option value={sortValue.value} key={sortValue.value}>

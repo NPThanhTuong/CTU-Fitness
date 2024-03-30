@@ -6,7 +6,6 @@ import { Breadcrumbs, Carousel, IconButton } from "@/components/midleExport";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function DetailTrainerPage({ params }) {

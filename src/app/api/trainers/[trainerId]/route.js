@@ -49,6 +49,7 @@ export async function GET(request, { params }) {
 					},
 				},
 			},
+			take: 4,
 		});
 
 		if (!trainer) return new Response("Trainer not found!", { status: 404 });
