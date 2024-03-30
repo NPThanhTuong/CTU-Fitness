@@ -41,3 +41,13 @@ export const expSort = [
 		title: "Kinh nghiệm giảm dần",
 	},
 ];
+export const priceSort = [
+	{
+		value: "asc",
+		title: "Giá tăng dần",
+	},
+	{
+		value: "desc",
+		title: "Giá giảm dần",
+	},
+];

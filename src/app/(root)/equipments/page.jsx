@@ -1,17 +1,17 @@
 "use client";
 
-import CardItem from "@/components/CardItem";
 import DefaultPagination from "@/components/DefaultPagination";
+import EquipmentCard from "@/components/EquipmentCard";
 import Search from "@/components/Search";
 import Sort from "@/components/Sort";
 import { Breadcrumbs } from "@/components/midleExport";
-import { expSort } from "@/utils/constants";
+import { priceSort } from "@/utils/constants";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function TrainersPage() {
-	const [trainers, setTrainers] = useState([]);
+function EquipmentsPage() {
+	const [equipments, setEquipments] = useState([]);
 	const [totalPage, setTotalPage] = useState(1);
 	const [loading, setLoading] = useState(true);
 	const searchParams = useSearchParams();
@@ -21,8 +21,8 @@ function TrainersPage() {
 		const getTrainers = async () => {
 			setLoading(true);
 			const res = await fetch(
-				`/api/trainers?query=${params.get("query") || ""}&expSort=${
-					params.get("expSort") || "asc"
+				`/api/equipments?query=${params.get("query") || ""}&priceSort=${
+					params.get("priceSort") || "asc"
 				}&page=${params.get("page") || 1}`,
 				{
 					method: "GET",
@@ -34,12 +34,12 @@ function TrainersPage() {
 
 			const { data, totalPage } = await res.json();
 			setLoading(false);
-			setTrainers(data);
+			setEquipments(data);
 			setTotalPage(totalPage);
 		};
 
 		getTrainers();
-	}, [params.get("query"), params.get("expSort"), params.get("page")]);
+	}, [params.get("query"), params.get("priceSort"), params.get("page")]);
 	return (
 		<main>
 			<div className="h-[80px] bg-[#27313b]"></div>
@@ -48,17 +48,14 @@ function TrainersPage() {
 					<Link href="/" className="opacity-60">
 						Trang chủ
 					</Link>
-					<Link href="/trainers">Huấn luyện viên</Link>
+					<Link href="/equipments">Thiết bị</Link>
 				</Breadcrumbs>
 				<div className="flex flex-col my-8 gap-4 lg:flex-row">
-					<Search
-						className="relative flex w-full"
-						label="Tên huấn luyện viên..."
-					/>
+					<Search className="relative flex w-full" label="Tên thiết bị..." />
 					<Sort
-						sortValues={expSort}
-						label="Lọc theo kinh nghiệm"
-						sortType="expSort"
+						sortValues={priceSort}
+						label="Lọc theo giá"
+						sortType="priceSort"
 					/>
 				</div>
 
@@ -66,25 +63,23 @@ function TrainersPage() {
 					<h3 className="text-3xl text-gray-500 font-bold text-center">
 						Đang tìm kiếm...
 					</h3>
-				) : trainers.length > 0 ? (
+				) : equipments.length > 0 ? (
 					<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-						{trainers.map((item) => (
-							<CardItem
-								key={item.employeeId}
-								id={item.employeeId}
-								srcImg={`/images/${item.employee.avatar}`}
-								category={item.position.name}
-								title={item.employee.fullname}
-								desc={item.employee.description}
-								linkFb="#"
-								linkTwitter="#"
-								linkIg="#"
+						{equipments.map((item) => (
+							<EquipmentCard
+								key={item?.id}
+								id={item?.id}
+								category={item?.equipmenttype?.name}
+								title={item?.name}
+								quantity={item?.quantity}
+								price={item?.price}
+								srcImg={`/images/${item?.equipmentimage[0]?.pathName}`}
 							/>
 						))}
 					</div>
 				) : (
 					<h3 className="text-3xl text-gray-500 font-bold text-center">
-						Không tìm thấy huấn luyện viên phù hợp.
+						Không tìm thấy thiết bị phù hợp.
 					</h3>
 				)}
 				<div className="flex justify-center mt-10">
@@ -95,4 +90,4 @@ function TrainersPage() {
 	);
 }
 
-export default TrainersPage;
+export default EquipmentsPage;

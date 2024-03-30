@@ -2,13 +2,13 @@ import prisma from "@/utils/prisma";
 
 export async function GET() {
 	try {
-		const data = await prisma.membershipPackage.findMany({
+		const data = await prisma.membershippackage.findMany({
 			select: {
 				coverImage: true,
 				name: true,
 				id: true,
 				description: true,
-				benefitOnMembershipPackages: {
+				benefitonmembershippackage: {
 					select: {
 						benefit: {
 							select: {

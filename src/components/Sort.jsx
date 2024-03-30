@@ -2,7 +2,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Option, Select } from "@material-tailwind/react";
 
-function Sort({ sortValues, label, className }) {
+function Sort({ sortValues, label, className, sortType }) {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const pathName = usePathname();
@@ -10,9 +10,9 @@ function Sort({ sortValues, label, className }) {
 	const handleSorting = (value) => {
 		const params = new URLSearchParams(searchParams);
 		if (value) {
-			params.set("expSort", value);
+			params.set(sortType, value);
 		} else {
-			params.delete("expSort");
+			params.delete(sortType);
 		}
 		router.replace(`${pathName}?${params.toString()}`);
 	};
@@ -20,7 +20,7 @@ function Sort({ sortValues, label, className }) {
 		<Select
 			variant="outlined"
 			label={label}
-			defaultValue={searchParams.get("expSort")?.toString()}
+			defaultValue={searchParams.get(sortType)?.toString()}
 			onChange={handleSorting}
 			className={className}
 		>

@@ -29,8 +29,8 @@ function TraningEquipmentHighlight({ className }) {
 					key={item.id}
 					id={item.id}
 					title={item.name}
-					image={item.EquipmentImage[0].pathName}
-					muscles={item.equipmentOnMuscles}
+					image={item.equipmentimage[0].pathName}
+					muscles={item.equipmentonmuscle}
 				/>
 			))}
 		</div>
