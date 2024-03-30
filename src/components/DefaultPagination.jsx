@@ -41,9 +41,9 @@ function DefaultPagination({ totalPage }) {
 				variant="text"
 				className="flex items-center gap-2"
 				onClick={prev}
-				disabled={currPage === 1}
+				disabled={currPage === 1 || numPages === 0}
 			>
-				<ArrowLeftIcon /> Previous
+				<ArrowLeftIcon /> Trang trước
 			</Button>
 			<div className="flex items-center gap-2">
 				{[...Array(totalPage)].map((el, index) => (
@@ -56,9 +56,9 @@ function DefaultPagination({ totalPage }) {
 				variant="text"
 				className="flex items-center gap-2"
 				onClick={next}
-				disabled={currPage === numPages}
+				disabled={currPage === numPages || numPages === 0}
 			>
-				Next
+				Trang sau
 				<ArrowRightIcon />
 			</Button>
 		</div>

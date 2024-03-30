@@ -10,9 +10,9 @@ function Sort({ sortValues, label, className }) {
 	const handleSorting = (value) => {
 		const params = new URLSearchParams(searchParams);
 		if (value) {
-			params.set("price", value);
+			params.set("expSort", value);
 		} else {
-			params.delete("price");
+			params.delete("expSort");
 		}
 		router.replace(`${pathName}?${params.toString()}`);
 	};
@@ -20,7 +20,7 @@ function Sort({ sortValues, label, className }) {
 		<Select
 			variant="outlined"
 			label={label}
-			defaultValue={searchParams.get("price")?.toString()}
+			defaultValue={searchParams.get("expSort")?.toString()}
 			onChange={handleSorting}
 			className={className}
 		>

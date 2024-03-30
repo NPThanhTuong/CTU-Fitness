@@ -31,13 +31,13 @@ export const webPaths = [
 	},
 ];
 
-export const priceSort = [
+export const expSort = [
 	{
 		value: "asc",
-		title: "Giá tăng dần",
+		title: "Kinh nghiệm tăng dần",
 	},
 	{
 		value: "desc",
-		title: "Giá giảm dần",
+		title: "Kinh nghiệm giảm dần",
 	},
 ];
