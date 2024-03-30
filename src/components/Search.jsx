@@ -33,6 +33,7 @@ function Search({ label, className }) {
 				}}
 				defaultValue={searchParams.get("query")?.toString()}
 				maxLength={50}
+				color="deep-orange"
 			/>
 
 			<SearchIcon

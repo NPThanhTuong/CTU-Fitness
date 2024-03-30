@@ -58,12 +58,12 @@ function ServiceTabs({ className }) {
 					</TabsHeader>
 					<TabsBody>
 						{membershipPackages.map(
-							({ id, name, coverImage, benefitOnMembershipPackages }) => (
+							({ id, name, coverImage, benefitonmembershippackage }) => (
 								<TabPanel key={id} value={id} className="py-0">
 									<ServiceItem
 										image={`/images/${coverImage}`}
 										title={name}
-										benefits={benefitOnMembershipPackages}
+										benefits={benefitonmembershippackage}
 									/>
 								</TabPanel>
 							)

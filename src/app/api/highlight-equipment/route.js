@@ -15,7 +15,7 @@ export async function GET(req) {
 			select: {
 				name: true,
 				id: true,
-				EquipmentImage: {
+				equipmentimage: {
 					select: {
 						pathName: true,
 					},
@@ -25,7 +25,7 @@ export async function GET(req) {
 						},
 					},
 				},
-				equipmentOnMuscles: {
+				equipmentonmuscle: {
 					select: {
 						muscle: {
 							select: {

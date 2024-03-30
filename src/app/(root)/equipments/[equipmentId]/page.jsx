@@ -2,21 +2,23 @@
 
 import Button from "@/components/Button";
 import CardItem from "@/components/CardItem";
+import EquipmentCard from "@/components/EquipmentCard";
 import { Breadcrumbs, Carousel, IconButton } from "@/components/midleExport";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-function DetailTrainerPage({ params }) {
-	const { trainerId } = params;
-	const [trainer, setTrainer] = useState();
-	const [relatedTrainers, setRelatedTrainers] = useState([]);
+function DetailEquipmentPage({ params }) {
+	const { equipmentId } = params;
+	const [equipment, setEquipment] = useState();
+	const [relatedEquipments, setRelatedEquipments] = useState([]);
 	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
-		const getTrainer = async () => {
+		const getEquipment = async () => {
 			setLoading(true);
-			const res = await fetch(`/api/trainers/${trainerId}`, {
+			const res = await fetch(`/api/equipments/${equipmentId}`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -26,13 +28,13 @@ function DetailTrainerPage({ params }) {
 			setLoading(false);
 
 			if (res.ok) {
-				const { trainer, relatedTrainers } = await res.json();
-				setTrainer(trainer);
-				setRelatedTrainers(relatedTrainers);
+				const { equipment, relatedEquipments } = await res.json();
+				setEquipment(equipment);
+				setRelatedEquipments(relatedEquipments);
 			}
 		};
 
-		getTrainer();
+		getEquipment();
 	}, []);
 
 	return (
@@ -43,10 +45,10 @@ function DetailTrainerPage({ params }) {
 					<Link href="/" className="opacity-60">
 						Trang chủ
 					</Link>
-					<Link href="/trainers" className="opacity-60">
-						Huấn luyện viên
+					<Link href="/equipments" className="opacity-60">
+						Thiết bị
 					</Link>
-					<Link href={`/trainers/${trainerId}`}>{trainerId}</Link>
+					<Link href={`/equipments/${equipmentId}`}>{equipmentId}</Link>
 				</Breadcrumbs>
 
 				<div className="bg-white shadow-lg px-6 py-8 rounded-lg mt-8">
@@ -54,7 +56,7 @@ function DetailTrainerPage({ params }) {
 						<p className="text-2xl text-center text-gray-500 font-bold">
 							Đang tải....
 						</p>
-					) : trainer ? (
+					) : equipment ? (
 						<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 							<Carousel
 								loop
@@ -62,7 +64,7 @@ function DetailTrainerPage({ params }) {
 								prevArrow={({ handlePrev }) => (
 									<IconButton
 										variant="text"
-										color="white"
+										color="deep-orange"
 										size="lg"
 										onClick={handlePrev}
 										className="!absolute top-2/4 left-4 -translate-y-2/4"
@@ -73,7 +75,7 @@ function DetailTrainerPage({ params }) {
 								nextArrow={({ handleNext }) => (
 									<IconButton
 										variant="text"
-										color="white"
+										color="deep-orange"
 										size="lg"
 										onClick={handleNext}
 										className="!absolute top-2/4 !right-4 -translate-y-2/4"
@@ -87,7 +89,9 @@ function DetailTrainerPage({ params }) {
 											<span
 												key={i}
 												className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-													activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+													activeIndex === i
+														? "w-8 bg-primary"
+														: "w-4 bg-primary/50"
 												}`}
 												onClick={() => setActiveIndex(i)}
 											/>
@@ -95,86 +99,100 @@ function DetailTrainerPage({ params }) {
 									</div>
 								)}
 							>
-								<Image
-									src={`/images/${trainer?.employee?.avatar}`}
-									alt="Avatar huấn luyện viên"
-									width={1000}
-									height={1000}
-									className="h-full w-full object-cover"
-								/>
+								{equipment?.equipmentimage.map((item, index) => (
+									<Image
+										key={index + "_equipmentImg"}
+										src={`/images/${item?.pathName}`}
+										alt="Ảnh minh họa thiết bị"
+										width={1000}
+										height={1000}
+										className="h-full w-full object-cover"
+									/>
+								))}
 							</Carousel>
 
 							<div className="mt-4">
-								<h3 className="font-bold text-3xl">
-									{trainer?.employee?.fullname}
-								</h3>
+								<h3 className="font-bold text-3xl">{equipment?.name}</h3>
 								<h4 className="text-primary mt-2 text-lg font-semibold">
-									{trainer?.position?.name}
+									{equipment?.equipmenttype?.name}
 								</h4>
 
-								<div className="mt-5">
-									<h5 className="text-lg font-bold">Liên hệ</h5>
-									<div className="mt-2 flex gap-4">
-										<span className="flex gap-3 items-center">
-											<Image
-												src="/images/icons/email.png"
-												width={24}
-												height={24}
-												alt="email icon"
-											/>
-											{trainer?.employee?.email}
-										</span>
-										<span className="flex gap-3 items-center">
-											<Image
-												src="/images/icons/viber.png"
-												width={24}
-												height={24}
-												alt="phone icon"
-											/>
-											{trainer?.employee?.phoneNumber}
-										</span>
+								{equipment?.equipmentonmuscle.length > 0 && (
+									<div className="mt-5">
+										<h5 className="text-lg font-bold">Bổ trợ nhóm cơ</h5>
+										<div className="mt-2 flex gap-6">
+											{equipment?.equipmentonmuscle.map(({ muscle }, index) => {
+												return (
+													<span
+														key={index + "_musclekey"}
+														className="flex gap-1 items-center"
+													>
+														<Image
+															src={`/images/icons/${muscle?.image}`}
+															width={56}
+															height={56}
+															alt="muscle icon"
+														/>
+														{muscle?.name}
+													</span>
+												);
+											})}
+										</div>
 									</div>
-								</div>
+								)}
 
 								<div className="mt-5">
 									<h5 className="text-lg font-bold">Mô tả</h5>
-									<p className="mt-2 text-gray-800">
-										{trainer?.employee?.description}
+									<p className="mt-2 text-gray-800">{equipment?.description}</p>
+								</div>
+								<div className="mt-5">
+									<h5 className="text-lg font-bold">Giá trị</h5>
+									<p className="mt-2 text-gray-800 font-semibold">
+										{(equipment?.price * 1000).toLocaleString("it-IT", {
+											style: "currency",
+											currency: "VND",
+										})}
+									</p>
+								</div>
+								<div className="mt-5">
+									<h5 className="text-lg font-bold">Số lượng</h5>
+									<p className="mt-2 text-gray-800 font-semibold">
+										{equipment?.quantity}
 									</p>
 								</div>
 
 								<div className="flex justify-center lg:justify-start">
 									<Button className="bg-primary hover:scale-105 mt-5">
-										Đặt lịch ngay
+										Tham gia tập luyện
 									</Button>
 								</div>
 							</div>
 						</div>
 					) : (
 						<p className="text-2xl text-center text-gray-500 font-bold">
-							Không tìm thấy huấn luyện viên.
+							Không tìm thấy thiết bị.
 						</p>
 					)}
 				</div>
 				<div className="bg-white shadow-lg p-6 rounded-lg mt-8 lg:p-8">
-					<h4 className="text-3xl font-bold">Huấn luyện viên liên quan</h4>
+					<h4 className="text-3xl font-bold">Thiết bị liên quan</h4>
 					{loading ? (
 						<p className="text-2xl text-center text-gray-500 font-bold my-4">
 							Đang tải...
 						</p>
-					) : relatedTrainers.length > 0 ? (
+					) : relatedEquipments.length > 0 ? (
 						<>
 							{/* Mobile */}
 							<div className="w-full flex gap-4 snap-x overflow-x-auto pb-9 mt-4 lg:hidden">
-								{relatedTrainers.map((item) => (
+								{relatedEquipments.map((item) => (
 									<div
-										key={item?.employeeId}
+										key={item?.id}
 										className="snap-start snap-always shrink-0 first:pl-3 last:pr-3"
 									>
 										<div className="w-80 h-36 shadow-md p-3 flex gap-3 justify-center items-center">
 											<div className="flex justify-center items-center">
 												<Image
-													src={`/images/${item?.employee?.avatar}`}
+													src={`/images/${item?.equipmentimage[0]?.pathName}`}
 													width={110}
 													height={110}
 													alt="Trainer info"
@@ -183,14 +201,12 @@ function DetailTrainerPage({ params }) {
 											</div>
 
 											<div className="flex flex-col flex-1 overflow-hidden justify-center">
-												<h5 className="text-lg font-semibold">
-													{item?.employee?.fullname}
-												</h5>
-												<p className="line-clamp-2  text-gray-800">
-													{item?.position?.description}
+												<h5 className="text-lg font-semibold">{item?.name}</h5>
+												<p className="line-clamp-2 text-gray-800">
+													{item?.equipmenttype?.name}
 												</p>
 												<Link
-													href={`/trainers/${item?.employeeId}`}
+													href={`/equipments/${item?.id}`}
 													className="text-primary hover:underline"
 												>
 													Chi tiết
@@ -202,24 +218,22 @@ function DetailTrainerPage({ params }) {
 							</div>
 							{/* Desktop */}
 							<div className="hidden lg:grid lg:gap-4 lg:grid-cols-4 lg:mt-4">
-								{relatedTrainers.map((item) => (
-									<CardItem
-										key={item?.employeeId}
-										id={item?.employeeId}
-										srcImg={`/images/${item?.employee?.avatar}`}
-										category={item?.position?.name}
-										title={item?.employee?.fullname}
-										desc={item?.position?.description}
-										linkFb="#"
-										linkTwitter="#"
-										linkIg="#"
+								{relatedEquipments.map((item) => (
+									<EquipmentCard
+										key={item?.id}
+										id={item?.id}
+										category={item?.equipmenttype?.name}
+										title={item?.name}
+										quantity={item?.quantity}
+										price={item?.price}
+										srcImg={`/images/${item?.equipmentimage[0]?.pathName}`}
 									/>
 								))}
 							</div>
 						</>
 					) : (
 						<p className="text-2xl text-center text-gray-500 font-bold my-4">
-							Không tìm thấy huấn luyện viên liên quan.
+							Không tìm thấy thiết bị liên quan.
 						</p>
 					)}
 				</div>
@@ -228,4 +242,4 @@ function DetailTrainerPage({ params }) {
 	);
 }
 
-export default DetailTrainerPage;
+export default DetailEquipmentPage;
