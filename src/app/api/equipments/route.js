@@ -30,9 +30,12 @@ export async function GET(request) {
 					},
 					where: {
 						pathName: {
-							contains: "main",
+							not: {
+								contains: "main",
+							},
 						},
 					},
+					take: 1,
 				},
 				equipmenttype: {
 					select: {
