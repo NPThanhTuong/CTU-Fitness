@@ -1,11 +1,11 @@
 import { Button, Typography } from "@/components/midleExport";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-function Pagination({ className }) {
+function Pagination({ className, totalPage }) {
 	const router = useRouter();
 	const pathName = usePathname();
 	const searchParams = useSearchParams();
-	const numPages = 10;
+	const numPages = totalPage;
 	const params = new URLSearchParams(searchParams);
 	const currPage = parseInt(searchParams.get("page")) || 1;
 
@@ -33,7 +33,7 @@ function Pagination({ className }) {
 					variant="outlined"
 					size="sm"
 					onClick={prev}
-					disabled={currPage === 1}
+					disabled={currPage === 1 || numPages === 1}
 				>
 					Trước
 				</Button>
@@ -41,7 +41,7 @@ function Pagination({ className }) {
 					variant="outlined"
 					size="sm"
 					onClick={next}
-					disabled={currPage === numPages}
+					disabled={currPage === numPages || numPages === 1}
 				>
 					Sau
 				</Button>

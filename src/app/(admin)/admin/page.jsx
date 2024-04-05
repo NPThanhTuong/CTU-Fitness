@@ -1,11 +1,9 @@
 "use client";
 
 import MetricsCard from "@/components/Admin/MetricsCard";
+import TopHeader from "@/components/Admin/TopHeader";
 import {
 	ChartBarIcon,
-	ClipboardDocumentIcon,
-	Squares2X2Icon,
-	HomeIcon,
 	UserGroupIcon,
 	CurrencyDollarIcon,
 	UserPlusIcon,
@@ -74,39 +72,47 @@ function MainPage() {
 	};
 
 	return (
-		<div className="px-4 mt-2">
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				{metricsList.map((metricItem, index) => (
-					<MetricsCard
-						key={index}
-						metrics={metricItem.metrics}
-						title={metricItem.title}
-						icon={metricItem.icon}
-					/>
-				))}
-			</div>
+		<>
+			<TopHeader
+				href="/admin"
+				textLink="Trang chủ"
+				className="h-36 grid grid-cols-1 gap-4 lg:h-24 lg:flex lg:justify-between lg:items-center p-3"
+			/>
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
-				<div className="bg-white rounded-lg shadow-md p-5">
-					<div className="flex justify-between items-center mb-3">
-						<h5 className="font-semibold text-lg">Thu nhập các tháng</h5>
-						<div className="p-2 rounded-md bg-gray-100">
-							<CurrencyDollarIcon className="size-7 text-primary" />
-						</div>
-					</div>
-					<Line data={dataEarning} />
+			<div className="px-4 mt-2">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+					{metricsList.map((metricItem, index) => (
+						<MetricsCard
+							key={index}
+							metrics={metricItem.metrics}
+							title={metricItem.title}
+							icon={metricItem.icon}
+						/>
+					))}
 				</div>
-				<div className="bg-white rounded-lg shadow-md p-5">
-					<div className="flex justify-between items-center mb-3">
-						<h5 className="font-semibold text-lg">Khách hàng hàng tháng</h5>
-						<div className="p-2 rounded-md bg-gray-100">
-							<UserGroupIcon className="size-7 text-primary" />
+
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
+					<div className="bg-white rounded-lg shadow-md p-5">
+						<div className="flex justify-between items-center mb-3">
+							<h5 className="font-semibold text-lg">Thu nhập các tháng</h5>
+							<div className="p-2 rounded-md bg-gray-100">
+								<CurrencyDollarIcon className="size-7 text-primary" />
+							</div>
 						</div>
+						<Line data={dataEarning} />
 					</div>
-					<Bar data={dataMembership} />
+					<div className="bg-white rounded-lg shadow-md p-5">
+						<div className="flex justify-between items-center mb-3">
+							<h5 className="font-semibold text-lg">Khách hàng hàng tháng</h5>
+							<div className="p-2 rounded-md bg-gray-100">
+								<UserGroupIcon className="size-7 text-primary" />
+							</div>
+						</div>
+						<Bar data={dataMembership} />
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

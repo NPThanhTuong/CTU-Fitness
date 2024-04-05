@@ -1,5 +1,3 @@
-import { ChartBarIcon } from "@heroicons/react/24/solid";
-
 function MetricsCard({ icon, title, metrics }) {
 	return (
 		<div className="p-5 bg-white flex gap-4 rounded-xl shadow-md items-center">
