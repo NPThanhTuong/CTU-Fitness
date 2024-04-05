@@ -22,10 +22,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import moment from "moment";
+import { deleteEquipment } from "@/utils/formActions";
 
 function EquipmentPage() {
 	const [open, setOpen] = useState(false);
-	const [deleteEquipment, setDeleteEquipment] = useState({});
+	const [deleteEquipmentId, setDeleteEquipmentId] = useState();
 	const [equipments, setEquipments] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [totalPage, setTotalPage] = useState(1);
@@ -61,13 +62,15 @@ function EquipmentPage() {
 
 	const handleOpen = (id) => {
 		setOpen(!open);
-		setDeleteEquipment(id);
+		setDeleteEquipmentId(id);
 	};
 
-	const handleDelete = () => {
-		console.log({ id: deleteEquipment });
-		// Fetch api để xóa user
+	const handleDelete = async () => {
 		setOpen(!open);
+		deleteEquipment(deleteEquipmentId);
+		setEquipments((prevList) =>
+			prevList.filter((item) => item.id !== deleteEquipmentId)
+		);
 	};
 
 	const TABLE_HEAD = [
@@ -236,7 +239,7 @@ function EquipmentPage() {
 													</Typography>
 												</td>
 												<td className={classes}>
-													<Link href={`/admin/users/edit/${id}`}>
+													<Link href={`/admin/equipments/${id}/edit`}>
 														<Tooltip content="Edit">
 															<IconButton variant="text">
 																<PencilSquareIcon className="h-5 w-5 text-amber-800" />
@@ -270,7 +273,7 @@ function EquipmentPage() {
 							<Dialog open={open} handler={handleOpen}>
 								<DialogHeader>
 									<span>
-										Xóa thiết bị có ID là {deleteEquipment} khỏi hệ thống.
+										Xóa thiết bị có ID là {deleteEquipmentId} khỏi hệ thống.
 									</span>
 								</DialogHeader>
 								<DialogBody>
@@ -286,9 +289,15 @@ function EquipmentPage() {
 									>
 										<span>Hủy</span>
 									</Button>
-									<Button variant="gradient" color="red" onClick={handleDelete}>
-										<span>Xóa</span>
-									</Button>
+									<form action={deleteEquipment}>
+										<Button
+											variant="gradient"
+											color="red"
+											onClick={handleDelete}
+										>
+											<span>Xóa</span>
+										</Button>
+									</form>
 								</DialogFooter>
 							</Dialog>
 						</tbody>

@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { IconButton } from "@material-tailwind/react";
 
 function NavVertical({ navList, onClick }) {
 	const pathName = usePathname();
+
+	// Lấy ra đường dẫn để hiển thị active tab ở navbar
+	const activePath = pathName.split("/")[2] || pathName.split("/")[1];
 
 	return (
 		<>
@@ -35,7 +37,7 @@ function NavVertical({ navList, onClick }) {
 						key={navItem.href}
 						className={twMerge(
 							"block p-3 w-full rounded-md text-gray-800 hover:bg-gray-200 transition-all",
-							pathName === navItem.href
+							activePath === navItem.activePath
 								? "text-white bg-primary hover:bg-primary/90"
 								: ""
 						)}

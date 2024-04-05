@@ -12,8 +12,17 @@ import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { vi } from "date-fns/locale";
 import { useState } from "react";
 
-function DatePicker({ className, nameInput, idInput, placeholder, required }) {
-	const [date, setDate] = useState(new Date());
+function DatePicker({
+	className,
+	nameInput,
+	idInput,
+	placeholder,
+	required,
+	defaultValue,
+}) {
+	const [date, setDate] = useState(
+		defaultValue ? new Date(defaultValue) : new Date()
+	);
 	return (
 		<div className={className}>
 			<Popover placement="bottom">

@@ -51,3 +51,41 @@ export const priceSort = [
 		title: "Giá giảm dần",
 	},
 ];
+
+export const navList = [
+	{
+		href: "/admin",
+		textLink: "Trang chủ",
+		activePath: "admin",
+	},
+	{
+		href: "/admin/users",
+		textLink: "Người dùng",
+		activePath: "users",
+	},
+	{
+		href: "/admin/equipments",
+		textLink: "Thiết bị",
+		activePath: "equipments",
+	},
+	{
+		href: "/admin/exercises",
+		textLink: "Bài tập",
+		activePath: "exercises",
+	},
+	{
+		href: "/admin/training-sessions",
+		textLink: "Buổi tập",
+		activePath: "training-sessions",
+	},
+	{
+		href: "/admin/benefits",
+		textLink: "Quyền lợi",
+		activePath: "benefits",
+	},
+	{
+		href: "/admin/membership-packages",
+		textLink: "Gói thành viên",
+		activePath: "membership-packages",
+	},
+];

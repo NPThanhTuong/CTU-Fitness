@@ -18,12 +18,16 @@ function CreateEquipment() {
 					</Typography>
 				</CardHeader>
 				<CardBody className="border-t-2">
-					<FormEquipment type="Thêm" action={createEquipment} />
+					<FormEquipment
+						type="Thêm"
+						action={createEquipment}
+						formId="createEquipmentForm"
+					/>
 				</CardBody>
 				<CardFooter>
 					<hr />
 					<div className="text-sm text-gray-400 text-center my-4">
-						Made with love
+						From CTU with love ❤️
 					</div>
 				</CardFooter>
 			</Card>
