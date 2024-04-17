@@ -38,16 +38,19 @@ function DatePicker({
 						name={nameInput}
 						onChange={() => null}
 						value={date ? format(date, "dd/MM/yyyy") : ""}
-						required={required}
 					/>
 				</PopoverHandler>
 				<PopoverContent>
 					<DayPicker
 						mode="single"
+						required={required}
 						locale={vi}
 						selected={date}
 						onSelect={setDate}
 						showOutsideDays
+						captionLayout="dropdown-buttons"
+						fromYear={1960}
+						toYear={new Date().getFullYear()}
 						classNames={{
 							caption: "flex justify-center py-2 mb-4 relative items-center",
 							caption_label: "text-sm font-medium text-gray-900",
