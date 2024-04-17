@@ -2,10 +2,11 @@
 import mime from "mime";
 import { add, format, parse } from "date-fns";
 import prisma from "./prisma";
-import path, { join } from "path";
+import { join } from "path";
 import { unlink, writeFile } from "fs/promises";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { existsSync } from "fs";
 
 export async function createEquipment(formData) {
 	const files = formData.getAll("equipmentImage");
@@ -204,6 +205,16 @@ export async function deleteEquipment(equipmentId) {
 			},
 		});
 
+		const equipmentImages = await prisma.equipmentimage.findMany({
+			where: {
+				equipmentId: equipmentId,
+			},
+		});
+
+		equipmentImages.forEach(async (image) => {
+			await unlink(join(process.cwd(), "public", "images", image.pathName));
+		});
+
 		// Xóa các nhóm cơ bổ trợ của thiết bị
 		const deleteMuscle = prisma.equipmentonmuscle.deleteMany({
 			where: {
@@ -242,6 +253,170 @@ export async function deleteEquipment(equipmentId) {
 		revalidatePath("/(admin)/admin/equipments", "page");
 	} catch (err) {
 		console.error("There was an error: ", err.message);
+		await prisma.$disconnect();
+	}
+}
+
+export async function createEmployee(formData) {
+	const file = formData.get("avatar");
+	let fileName = "no-avatar.jpg";
+	const uploadDir = join(process.cwd(), "public", "images");
+
+	const businessDate = parse(
+		formData.get("businessDate"),
+		"dd/MM/yyyy",
+		new Date()
+	);
+	const dayOfBirdth = parse(
+		formData.get("dayOfBirdth"),
+		"dd/MM/yyyy",
+		new Date()
+	);
+	try {
+		if (file.size > 0) {
+			const buffer = Buffer.from(await file.arrayBuffer());
+			const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+			fileName = `${file.name.replace(
+				/\.[^/.]+$/,
+				""
+			)}-${uniqueSuffix}.${mime.getExtension(file.type)}`;
+
+			await writeFile(`${uploadDir}/${fileName}`, buffer);
+		}
+
+		const newEmployee = await prisma.employee.create({
+			data: {
+				fullname: formData.get("fullname"),
+				cid: formData.get("cid"),
+				dayOfBirdth: new Date(dayOfBirdth),
+				email: formData.get("email"),
+				phoneNumber: formData.get("phoneNumber"),
+				address: formData.get("address"),
+				// socials: formData.get("socials"), add later
+				facilityId: parseInt(formData.get("facilityId")),
+				avatar: fileName,
+				description: formData.get("description"),
+				experience: formData.get("experience"),
+				business: {
+					create: {
+						departmentId: parseInt(formData.get("departmentId")),
+						positionId: parseInt(formData.get("positionId")),
+						businessTypeId: parseInt(formData.get("businessTypeId")),
+						businessDate: new Date(businessDate),
+					},
+				},
+			},
+		});
+
+		await prisma.$disconnect();
+	} catch (err) {
+		console.error("There was an error: ", err.message);
+		await prisma.$disconnect();
+	}
+	redirect("/admin/employees");
+}
+
+export async function updateEmployee(formData) {
+	const file = formData.get("avatar");
+	let fileName = formData.get("oldAvatar");
+	const uploadDir = join(process.cwd(), "public", "images");
+
+	const businessDate = parse(
+		formData.get("businessDate"),
+		"dd/MM/yyyy",
+		new Date()
+	);
+	const dayOfBirdth = parse(
+		formData.get("dayOfBirdth"),
+		"dd/MM/yyyy",
+		new Date()
+	);
+
+	try {
+		if (file.size > 0) {
+			// Xóa file ảnh cũ
+			if (fileName !== "no-avatar.jpg") {
+				await unlink(join(uploadDir, fileName));
+			}
+			// Tạo file ảnh mới
+			const buffer = Buffer.from(await file.arrayBuffer());
+			const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+			fileName = `${file.name.replace(
+				/\.[^/.]+$/,
+				""
+			)}-${uniqueSuffix}.${mime.getExtension(file.type)}`;
+			await writeFile(`${uploadDir}/${fileName}`, buffer);
+		}
+
+		// Cập nhật thông tin employee
+		const updatedEmployee = await prisma.employee.update({
+			where: {
+				id: parseInt(formData.get("employeeId")),
+			},
+			data: {
+				fullname: formData.get("fullname"),
+				cid: formData.get("cid"),
+				dayOfBirdth: new Date(dayOfBirdth),
+				email: formData.get("email"),
+				phoneNumber: formData.get("phoneNumber"),
+				address: formData.get("address"),
+				// socials: formData.get("socials"), add later
+				facilityId: parseInt(formData.get("facilityId")),
+				avatar: fileName,
+				description: formData.get("description"),
+				experience: formData.get("experience"),
+				business: {
+					updateMany: {
+						where: {
+							employeeId: parseInt(formData.get("employeeId")),
+						},
+						data: {
+							departmentId: parseInt(formData.get("departmentId")),
+							positionId: parseInt(formData.get("positionId")),
+							businessTypeId: parseInt(formData.get("businessTypeId")),
+							businessDate: new Date(businessDate),
+						},
+					},
+				},
+			},
+		});
+
+		await prisma.$disconnect();
+	} catch (err) {
+		console.error("There was an error: ", err.message);
+		await prisma.$disconnect();
+	}
+	redirect("/admin/employees");
+}
+
+export async function deleteEmployee(employeeId) {
+	const uploadDir = join(process.cwd(), "public", "images");
+	try {
+		// Xóa công tác của nhân viên
+		const deletedBusiness = await prisma.business.deleteMany({
+			where: {
+				employeeId: parseInt(employeeId),
+			},
+		});
+
+		// Xóa nhân viên
+		const deletedEmployee = await prisma.employee.delete({
+			where: {
+				id: parseInt(employeeId),
+			},
+			select: {
+				avatar: true,
+			},
+		});
+
+		if (deletedEmployee?.avatar !== "no-avatar.jpg") {
+			await unlink(join(uploadDir, deletedEmployee?.avatar));
+		}
+
+		await prisma.$disconnect();
+		revalidatePath("/(admin)/admin/employees", "page");
+	} catch (error) {
+		console.log("There was an error: ", error.message);
 		await prisma.$disconnect();
 	}
 }

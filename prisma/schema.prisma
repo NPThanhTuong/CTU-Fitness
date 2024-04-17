@@ -85,9 +85,9 @@ model employee {
   dayOfBirdth    DateTime         @db.Date
   cid            String           @db.VarChar(12)
   email          String           @db.VarChar(50)
-  phoneNumber    String           @db.VarChar(11)
+  phoneNumber    String           @db.VarChar(10)
   address        String           @db.VarChar(50)
-  socials        String           @db.VarChar(256)
+  socials        String?          @db.VarChar(256)
   facilityId     Int
   avatar         String           @default("no-avatar.jpg") @db.VarChar(256)
   description    String           @default("Mô tả của nhân viên") @db.VarChar(4096)

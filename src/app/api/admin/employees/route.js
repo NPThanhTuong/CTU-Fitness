@@ -3,40 +3,44 @@ import prisma from "@/utils/prisma";
 export async function GET(request) {
 	const { searchParams } = new URL(request.url);
 	let pageNum = parseInt(searchParams.get("page")) || 1;
+	// const priceSort = searchParams.get("priceSort") || "asc";
 	const nameSearch = searchParams.get("query") || "";
-	const expSort = searchParams.get("expSort") || "asc";
-
-	const perPage = 8;
+	const perPage = 4;
 
 	if (pageNum < 1) pageNum = 1;
 
 	try {
 		const data = await prisma.business.findMany({
 			where: {
-				departmentId: 1,
 				employee: {
 					fullname: {
 						contains: nameSearch,
 					},
 				},
 			},
-			orderBy: {
-				employee: {
-					experience: expSort,
-				},
-			},
-			include: {
+			select: {
+				employeeId: true,
+				businessDate: true,
+				businessTypeId: true,
 				employee: {
 					select: {
 						fullname: true,
-						experience: true,
+						email: true,
 						avatar: true,
 						phoneNumber: true,
-						email: true,
-						description: true,
 					},
 				},
 				position: {
+					select: {
+						name: true,
+					},
+				},
+				department: {
+					select: {
+						name: true,
+					},
+				},
+				businesstype: {
 					select: {
 						name: true,
 					},
@@ -46,24 +50,21 @@ export async function GET(request) {
 			take: perPage,
 		});
 
-		const count = await prisma.business.aggregate({
+		const count = await prisma.employee.aggregate({
 			where: {
-				departmentId: 1,
-				employee: {
-					fullname: {
-						contains: nameSearch,
-					},
+				fullname: {
+					contains: nameSearch,
 				},
 			},
 			_count: true,
 		});
-		const totalPage = Math.ceil(count._count / perPage);
-		await prisma.$disconnect();
 
+		await prisma.$disconnect();
+		const totalPage = Math.ceil(count._count / perPage);
 		return Response.json({ data, totalPage });
 	} catch (err) {
 		console.log(err);
 		await prisma.$disconnect();
-		return new Response("Failed to fetch all trainers", { status: 500 });
+		return new Response("Failed to fetch all employees", { status: 500 });
 	}
 }

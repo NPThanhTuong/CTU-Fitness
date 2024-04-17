@@ -69,6 +69,11 @@ export const navList = [
 		activePath: "equipments",
 	},
 	{
+		href: "/admin/employees",
+		textLink: "Nhân viên",
+		activePath: "employees",
+	},
+	{
 		href: "/admin/exercises",
 		textLink: "Bài tập",
 		activePath: "exercises",
