@@ -185,8 +185,9 @@ export async function deleteImage(pathName) {
 		});
 
 		await prisma.$disconnect();
-
-		await unlink(imgPath);
+		if (existsSync(imgPath)) {
+			await unlink(imgPath);
+		}
 
 		console.log(`Successfully deleted ${imgPath}`);
 	} catch (error) {

@@ -15,7 +15,7 @@ function EquipmentCard({
 	category,
 	title,
 	quantity,
-	price,
+	origin,
 }) {
 	return (
 		<Card className={twMerge("", className)}>
@@ -45,13 +45,7 @@ function EquipmentCard({
 			<CardFooter className="flex flex-col gap-4 p-6 pt-0">
 				<div className="font-semibold">
 					<p className="text-gray-800">Số lượng: {quantity}</p>
-					<p className="text-gray-800 mt-2">
-						Giá trị:{" "}
-						{(price * 1000).toLocaleString("it-IT", {
-							style: "currency",
-							currency: "VND",
-						})}
-					</p>
+					<p className="text-gray-800 mt-2">Xuất xứ: {origin}</p>
 				</div>
 				<Link
 					href={`/equipments/${id}`}

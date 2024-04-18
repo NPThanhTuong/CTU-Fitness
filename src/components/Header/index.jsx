@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CloseIcon, MenuBarIcon } from "@/icons";
 import NavList from "./NavList";
 import { twMerge } from "tailwind-merge";
+import Image from "next/image";
 
 function Header() {
 	const [openNav, setOpenNav] = useState(false);
@@ -33,8 +34,17 @@ function Header() {
 					<h1 className="uppercase font-extrabold text-2xl text-white">
 						<Link
 							href="/"
-							className={twMerge(isScrollDown ? "text-gray-800" : "text-white")}
+							className={twMerge(
+								isScrollDown ? "text-gray-800" : "text-white",
+								"flex gap-2 items-center"
+							)}
 						>
+							<Image
+								src="/images/logo-ctu.png"
+								width={56}
+								height={56}
+								alt="Logo CTU"
+							/>
 							CTU <span className="text-primary">Fitness</span>
 						</Link>
 					</h1>

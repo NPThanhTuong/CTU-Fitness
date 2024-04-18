@@ -20,14 +20,14 @@ function RegisterMemberPage() {
 					<div className="container mx-auto px-3 py-12 lg:py-20">
 						<div className="flex flex-col gap-16 lg:flex-row">
 							<div className="w-full max-w-[600px]">
-								<h3 className="text-6xl text-primary font-bold uppercase">
-									Join the workout now
+								<h3 className="text-6xl text-primary font-bold uppercase leading-tight">
+									Tham gia tập luyện ngay
 								</h3>
 								<p className="text-white mt-4">
-									Please leave your information and we will contact you within
-									24 hours! (When making payments, please only pay to Training
-									Studio company, do not make transactions or transfers to
-									non-company accounts)
+									Hãy để lại thông tin và chúng tôi sẽ liên hệ bạn trong vòng
+									24h! (Khi phát sinh thanh toán, vui lòng chỉ thanh toán cho cơ
+									sở CTU Fitness, không giao dịch hay chuyển khoản vào tài khoản
+									không phải của cơ sở CTU Fitness)
 								</p>
 							</div>
 							<form
@@ -51,7 +51,7 @@ function RegisterMemberPage() {
 										type="submit"
 										className="py-3 px-12 text-white font-semibold bg-primary hover:scale-105 rounded-md transition-all"
 									>
-										Regiter
+										Đăng ký
 									</button>
 								</div>
 							</form>
@@ -63,18 +63,19 @@ function RegisterMemberPage() {
 				<div className="flex justify-around">
 					<div className="w-full max-w-[600px]">
 						<h3 className="text-6xl text-primary font-bold uppercase">
-							Benefits of membership Training Studio
+							LỢI ÍCH CỦA THÀNH VIÊN CTU FITNESS
 						</h3>
 						<ul className="list-disc pl-7 mt-8 text-gray-800">
-							<li>The club's location is convenient throughout the country</li>
-							<li>Unlimited workout program</li>
-							<li>International standard coach</li>
-							<li>Diverse membership packages to suit your needs</li>
+							<li>Vị trí CLB thuận tiện</li>
+							<li>Chương trình tập luyện không giới hạn</li>
+							<li>HLV tiêu chuẩn Quốc Tế </li>
+							<li>Đa dạng gói hội viên phù hợp với nhu cầu </li>
+							<li>Ưu đãi sức khoẻ từ ứng dụng đổi điểm lấy quà Livwell</li>
 							<li>
-								Health incentives from the Livwell point-for-gift exchange
-								application
+								Bảo hiểm tai nạn cá nhân lên đến 01 tỷ đồng dành cho hội viên
+								mới
 							</li>
-							<li>Diverse incentives from partners</li>
+							<li>Đa dạng ưu đãi từ đối tác</li>
 						</ul>
 					</div>
 

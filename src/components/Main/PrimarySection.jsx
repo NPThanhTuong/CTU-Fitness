@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 function PrimarySection({ children, title, desc }) {
 	return (

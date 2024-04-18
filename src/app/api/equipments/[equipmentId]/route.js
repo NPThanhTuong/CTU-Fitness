@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
 			where: {
 				id: equipmentId,
 			},
-			include: {
+			select: {
 				equipmentonmuscle: {
 					select: {
 						muscle: {
@@ -29,6 +29,10 @@ export async function GET(request, { params }) {
 						name: true,
 					},
 				},
+				distributor: true,
+				origin: true,
+				quantity: true,
+				description: true,
 			},
 		});
 
@@ -46,10 +50,10 @@ export async function GET(request, { params }) {
 			},
 			select: {
 				id: true,
-				price: true,
 				name: true,
 				quantity: true,
 				description: true,
+				origin: true,
 				equipmentimage: {
 					select: {
 						pathName: true,

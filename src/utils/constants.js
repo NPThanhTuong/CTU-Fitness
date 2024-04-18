@@ -51,6 +51,16 @@ export const priceSort = [
 		title: "Giá giảm dần",
 	},
 ];
+export const nameSort = [
+	{
+		value: "asc",
+		title: "Theo tên A-Z",
+	},
+	{
+		value: "desc",
+		title: "Theo tên Z-A",
+	},
+];
 
 export const navList = [
 	{
