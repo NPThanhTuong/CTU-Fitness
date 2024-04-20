@@ -62,11 +62,11 @@ model correction {
 model customer {
   id                 Int                  @id @default(autoincrement())
   fullname           String               @db.VarChar(50)
-  dayOfBirdth        DateTime             @db.Date
-  cid                String               @db.VarChar(12)
+  dayOfBirdth        DateTime?            @db.Date
+  cid                String?              @db.VarChar(12)
   email              String               @db.VarChar(50)
   phoneNumber        String               @db.VarChar(11)
-  address            String               @db.VarChar(50)
+  address            String?              @db.VarChar(50)
   paymentStatus      Boolean              @default(false)
   facilityoncustomer facilityoncustomer[]
   registerform       registerform[]

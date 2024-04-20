@@ -1,8 +1,63 @@
-import Button from "@/components/Button";
+"use client";
+
+import { Button, Option, Select } from "@material-tailwind/react";
 import { Input } from "@/components/midleExport";
 import Image from "next/image";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+import { registerMember } from "@/utils/formActions";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 function RegisterMemberPage() {
+	const [trainers, setTrainers] = useState([]);
+	const [memberPack, setMemberPack] = useState([]);
+	const [registerTrainerId, setRegisterTrainerId] = useState("1");
+	const [registerPackId, setRegisterPackId] = useState("1");
+	const formRef = useRef();
+
+	const handleSubmit = (formData) => {
+		registerMember(formData);
+		Swal.fire({
+			icon: "success",
+			title:
+				"Bạn đã đăng ký thành công gói thành viên tại CTU Fitness, chúng tôi sẽ sớm liên hệ với bạn.",
+			showConfirmButton: false,
+			timer: 2000,
+		});
+		// formRef.current.reset();
+	};
+
+	useEffect(() => {
+		const getTrainers = async () => {
+			const res = await fetch("/api/register-trainers", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			const { data } = await res.json();
+
+			setTrainers(data);
+		};
+
+		const getMembershipPackages = async () => {
+			const res = await fetch("/api/service-packages", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			const data = await res.json();
+			setMemberPack(data);
+		};
+
+		getTrainers();
+		getMembershipPackages();
+	}, []);
+
 	return (
 		<main>
 			<div className="h-[80px] bg-[#27313b]"></div>
@@ -31,22 +86,84 @@ function RegisterMemberPage() {
 								</p>
 							</div>
 							<form
-								action="/"
+								action={async (formData) => {
+									handleSubmit(formData);
+								}}
+								ref={formRef}
 								className="flex flex-col px-6 py-8 bg-white rounded-md shadow-md gap-6 flex-1"
-								method="POST"
 							>
 								<Input
+									name="fullname"
 									variant="standard"
 									label="Full name"
 									color="deep-orange"
+									type="text"
+									required
 								/>
 								<Input
+									name="phoneNumber"
 									variant="standard"
 									label="Phone number"
 									color="deep-orange"
+									type="tel"
+									maxLength={10}
+									minLength={10}
+									required
 								/>
-								<Input variant="standard" label="Email" color="deep-orange" />
-								<div className="flex justify-center ">
+								<Input
+									name="email"
+									variant="standard"
+									label="Email"
+									color="deep-orange"
+									type="email"
+									required
+								/>
+								<Select
+									variant="standard"
+									label="Huấn luyện viên"
+									name="trainerId"
+									color="deep-orange"
+									defaultValue={registerTrainerId}
+									onChange={(val) => setRegisterTrainerId(val)}
+								>
+									{trainers?.map((trainer) => (
+										<Option
+											value={`${trainer.employeeId}`}
+											key={trainer.employeeId}
+											className="flex justify-between items-center"
+										>
+											<span>{trainer.employee.fullname}</span>
+										</Option>
+									))}
+								</Select>
+
+								<Select
+									variant="standard"
+									label="Gói thành viên"
+									name="trainerId"
+									color="deep-orange"
+									defaultValue={registerPackId}
+									onChange={(val) => setRegisterPackId(val)}
+								>
+									{memberPack?.map((pack) => (
+										<Option
+											value={`${pack.id}`}
+											key={pack.id}
+											className="flex justify-between items-center"
+										>
+											{pack.name}
+										</Option>
+									))}
+								</Select>
+
+								<input
+									type="hidden"
+									name="trainerId"
+									value={registerTrainerId}
+								/>
+								<input type="hidden" name="packId" value={registerPackId} />
+
+								<div className="flex justify-center">
 									<button
 										type="submit"
 										className="py-3 px-12 text-white font-semibold bg-primary hover:scale-105 rounded-md transition-all"

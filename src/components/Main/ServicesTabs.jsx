@@ -58,12 +58,13 @@ function ServiceTabs({ className }) {
 					</TabsHeader>
 					<TabsBody>
 						{membershipPackages.map(
-							({ id, name, coverImage, benefitonmembershippackage }) => (
+							({ id, name, coverImage, benefitonmembershippackage, price }) => (
 								<TabPanel key={id} value={id} className="py-0">
 									<ServiceItem
 										image={`/images/${coverImage}`}
 										title={name}
 										benefits={benefitonmembershippackage}
+										price={price}
 									/>
 								</TabPanel>
 							)
@@ -93,12 +94,13 @@ function ServiceTabs({ className }) {
 					</TabsHeader>
 					<TabsBody>
 						{membershipPackages.map(
-							({ id, name, coverImage, benefitOnMembershipPackages }) => (
+							({ id, name, coverImage, benefitonmembershippackage, price }) => (
 								<TabPanel key={id} value={id} className="py-0">
 									<ServiceItem
 										image={`/images/${coverImage}`}
 										title={name}
-										benefits={benefitOnMembershipPackages}
+										benefits={benefitonmembershippackage}
+										price={price}
 									/>
 								</TabPanel>
 							)
