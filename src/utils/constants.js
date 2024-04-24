@@ -84,6 +84,11 @@ export const navList = [
 		activePath: "employees",
 	},
 	{
+		href: "/admin/register-forms",
+		textLink: "Đơn đăng ký",
+		activePath: "register-forms",
+	},
+	{
 		href: "/admin/exercises",
 		textLink: "Bài tập",
 		activePath: "exercises",

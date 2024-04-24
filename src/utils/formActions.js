@@ -471,3 +471,7 @@ export async function registerMember(formData) {
 
 	redirect("/");
 }
+
+export async function deleteRegisterForm(formData) {
+	console.log(formData);
+}
