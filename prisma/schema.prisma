@@ -80,22 +80,23 @@ model department {
 }
 
 model employee {
-  id             Int              @id @default(autoincrement())
-  fullname       String           @db.VarChar(50)
-  dayOfBirdth    DateTime         @db.Date
-  cid            String           @db.VarChar(12)
-  email          String           @db.VarChar(50)
-  phoneNumber    String           @db.VarChar(10)
-  address        String           @db.VarChar(50)
-  socials        String?          @db.VarChar(256)
-  facilityId     Int
-  avatar         String           @default("no-avatar.jpg") @db.VarChar(256)
-  description    String           @default("Mô tả của nhân viên") @db.VarChar(4096)
-  experience     String           @default("1 năm") @db.VarChar(32)
-  business       business[]
-  facility       facility         @relation(fields: [facilityId], references: [id], map: "Employee_facilityId_fkey")
-  registerform   registerform[]
-  traningsession traningsession[]
+  id               Int               @id @default(autoincrement())
+  fullname         String            @db.VarChar(50)
+  dayOfBirdth      DateTime          @db.Date
+  cid              String            @db.VarChar(12)
+  email            String            @db.VarChar(50)
+  phoneNumber      String            @db.VarChar(10)
+  address          String            @db.VarChar(50)
+  socials          String?           @db.VarChar(256)
+  facilityId       Int
+  avatar           String            @default("no-avatar.jpg") @db.VarChar(256)
+  description      String            @default("Mô tả của nhân viên") @db.VarChar(4096)
+  experience       String            @default("1 năm") @db.VarChar(32)
+  business         business[]
+  facility         facility          @relation(fields: [facilityId], references: [id], map: "Employee_facilityId_fkey")
+  registerform     registerform[]
+  traningsession   traningsession[]
+  employeeaccounts employeeaccount[]
 
   @@index([facilityId], map: "Employee_facilityId_fkey")
 }
@@ -264,8 +265,10 @@ model role {
 }
 
 model employeeaccount {
-  username String @id @db.VarChar(20)
-  password String @db.VarChar(256)
-  roleId   Int
-  role     role   @relation(fields: [roleId], references: [id])
+  username   String   @id @db.VarChar(20)
+  password   String   @db.VarChar(256)
+  roleId     Int
+  employeeId Int
+  role       role     @relation(fields: [roleId], references: [id])
+  employee   employee @relation(fields: [employeeId], references: [id])
 }
