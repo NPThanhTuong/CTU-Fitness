@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/Button";
 
-function ServiceItem({ image, title, benefits }) {
+function ServiceItem({ image, title, benefits, price }) {
 	return (
 		<div>
 			<Image
@@ -31,11 +31,25 @@ function ServiceItem({ image, title, benefits }) {
 					</li>
 				))}
 			</ul>
-			<Link href="/register-member" className="flex justify-center">
-				<Button size="lg" className="bg-primary hover:scale-105 mt-5">
-					Đăng ký ngay
-				</Button>
-			</Link>
+			<div className="flex justify-between items-center mt-5">
+				<div className="font-bold text-2xl text-white">
+					Giá:{" "}
+					<span className="text-primary">
+						{(price * 1000).toLocaleString("it-IT", {
+							style: "currency",
+							currency: "VND",
+						})}
+					</span>
+				</div>
+				<Link
+					href="/register-member"
+					className="flex justify-center items-center"
+				>
+					<Button size="lg" className="bg-primary hover:scale-105">
+						Đăng ký ngay
+					</Button>
+				</Link>
+			</div>
 		</div>
 	);
 }

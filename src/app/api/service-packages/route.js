@@ -8,6 +8,7 @@ export async function GET() {
 				name: true,
 				id: true,
 				description: true,
+				price: true,
 				benefitonmembershippackage: {
 					select: {
 						benefit: {

@@ -51,6 +51,16 @@ export const priceSort = [
 		title: "Giá giảm dần",
 	},
 ];
+export const nameSort = [
+	{
+		value: "asc",
+		title: "Theo tên A-Z",
+	},
+	{
+		value: "desc",
+		title: "Theo tên Z-A",
+	},
+];
 
 export const navList = [
 	{
@@ -74,6 +84,11 @@ export const navList = [
 		activePath: "employees",
 	},
 	{
+		href: "/admin/register-forms",
+		textLink: "Đơn đăng ký",
+		activePath: "register-forms",
+	},
+	{
 		href: "/admin/exercises",
 		textLink: "Bài tập",
 		activePath: "exercises",
@@ -94,3 +109,5 @@ export const navList = [
 		activePath: "membership-packages",
 	},
 ];
+
+export const saltRounds = 10;

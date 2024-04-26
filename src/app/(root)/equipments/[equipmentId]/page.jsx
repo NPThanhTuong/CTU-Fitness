@@ -146,12 +146,15 @@ function DetailEquipmentPage({ params }) {
 									<p className="mt-2 text-gray-800">{equipment?.description}</p>
 								</div>
 								<div className="mt-5">
-									<h5 className="text-lg font-bold">Giá trị</h5>
+									<h5 className="text-lg font-bold">Xuất xứ</h5>
 									<p className="mt-2 text-gray-800 font-semibold">
-										{(equipment?.price * 1000).toLocaleString("it-IT", {
-											style: "currency",
-											currency: "VND",
-										})}
+										{equipment?.origin}
+									</p>
+								</div>
+								<div className="mt-5">
+									<h5 className="text-lg font-bold">Nhà phân phối</h5>
+									<p className="mt-2 text-gray-800 font-semibold">
+										{equipment?.distributor}
 									</p>
 								</div>
 								<div className="mt-5">
@@ -225,7 +228,7 @@ function DetailEquipmentPage({ params }) {
 										category={item?.equipmenttype?.name}
 										title={item?.name}
 										quantity={item?.quantity}
-										price={item?.price}
+										origin={item?.origin}
 										srcImg={`/images/${item?.equipmentimage[0]?.pathName}`}
 									/>
 								))}

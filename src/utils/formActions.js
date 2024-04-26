@@ -1,6 +1,6 @@
 "use server";
 import mime from "mime";
-import { add, format, parse } from "date-fns";
+import { add, addMonths, format, parse } from "date-fns";
 import prisma from "./prisma";
 import { join } from "path";
 import { unlink, writeFile } from "fs/promises";
@@ -185,8 +185,9 @@ export async function deleteImage(pathName) {
 		});
 
 		await prisma.$disconnect();
-
-		await unlink(imgPath);
+		if (existsSync(imgPath)) {
+			await unlink(imgPath);
+		}
 
 		console.log(`Successfully deleted ${imgPath}`);
 	} catch (error) {
@@ -419,4 +420,58 @@ export async function deleteEmployee(employeeId) {
 		console.log("There was an error: ", error.message);
 		await prisma.$disconnect();
 	}
+}
+
+export async function registerMember(formData) {
+	console.log(formData);
+	try {
+		const memberPackage = await prisma.membershippackage.findFirst({
+			where: {
+				id: parseInt(formData.get("packId")),
+			},
+			select: {
+				shelfLife: true,
+				price: true,
+			},
+		});
+
+		const registerDate = new Date();
+		const registerExpiryDate = addMonths(registerDate, memberPackage.shelfLife);
+		const registerPrice = memberPackage.price;
+
+		const newCustomer = await prisma.customer.create({
+			data: {
+				fullname: formData.get("fullname"),
+				email: formData.get("email"),
+				phoneNumber: formData.get("phoneNumber"),
+				registerform: {
+					create: {
+						employee: {
+							connect: {
+								id: 3, // 3 là ID của quản trị viên
+							},
+						},
+						membershippackage: {
+							connect: {
+								id: parseInt(formData.get("packId")),
+							},
+						},
+						registerDate: registerDate,
+						registerExpiryDate: registerExpiryDate,
+						registerPrice: registerPrice,
+					},
+				},
+			},
+		});
+		await prisma.$disconnect();
+	} catch (error) {
+		console.log("There was an error: ", error.message);
+		await prisma.$disconnect();
+	}
+
+	redirect("/");
+}
+
+export async function deleteRegisterForm(formData) {
+	console.log(formData);
 }

@@ -62,11 +62,11 @@ model correction {
 model customer {
   id                 Int                  @id @default(autoincrement())
   fullname           String               @db.VarChar(50)
-  dayOfBirdth        DateTime             @db.Date
-  cid                String               @db.VarChar(12)
+  dayOfBirdth        DateTime?            @db.Date
+  cid                String?              @db.VarChar(12)
   email              String               @db.VarChar(50)
   phoneNumber        String               @db.VarChar(11)
-  address            String               @db.VarChar(50)
+  address            String?              @db.VarChar(50)
   paymentStatus      Boolean              @default(false)
   facilityoncustomer facilityoncustomer[]
   registerform       registerform[]
@@ -254,4 +254,18 @@ model traningsessiononexercise {
 
   @@id([trainingSessionId, exerciseId])
   @@index([exerciseId], map: "TraningSessionOnExercise_exerciseId_fkey")
+}
+
+model role {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(256)
+  permission      String            @db.VarChar(256)
+  employeeaccount employeeaccount[]
+}
+
+model employeeaccount {
+  username String @id @db.VarChar(20)
+  password String @db.VarChar(256)
+  roleId   Int
+  role     role   @relation(fields: [roleId], references: [id])
 }

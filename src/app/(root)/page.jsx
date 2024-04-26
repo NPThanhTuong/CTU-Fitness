@@ -1,26 +1,15 @@
 import IntroduceSection from "@/components/Main/IntroduceSection";
 import PrimarySection from "@/components/Main/PrimarySection";
 import SecondarySection from "@/components/Main/SecondarySection";
-import {
-	Card,
-	CardHeader,
-	CardBody,
-	CardFooter,
-	Tooltip,
-	Typography,
-} from "@/components/midleExport";
 import Button from "@/components/Button";
-import { FacebookIcon, InstagramIcon, TwitterIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import BenefitItem from "@/components/Main/BenefitItem";
 import IntroduceItem from "@/components/Main/IntroduceItem";
-import ServiceItem from "@/components/Main/ServiceItem";
 import ServiceTabs from "@/components/Main/ServicesTabs";
-import CardItem from "@/components/CardItem";
-import TraningEquipmentItem from "@/components/Main/TraningEquipmentItem";
 import TraningEquipmentHighlight from "@/components/Main/TraningEquipmentHighlight";
 import TrainerHighlightList from "@/components/Main/TrainerHighlightList";
+import { MapPinIcon, PhoneIcon } from "@heroicons/react/24/solid";
 
 export default function Home() {
 	return (
@@ -29,10 +18,118 @@ export default function Home() {
 			<PrimarySection
 				title={
 					<>
+						Lịch <span className="text-primary"> hoạt động</span>
+					</>
+				}
+				desc="Sức mạnh không đến từ năng lực thể chất. Nó đến từ ý chí không chịu khuất phục."
+			>
+				<div className="grid grid-cols-1 gap-9 lg:grid-cols-2 mt-10 lg:gap-12 lg:mt-16">
+					<div className="lg:col-span-2">
+						<div>
+							<h2 className="font-bold text-primary text-3xl uppercase">
+								CTU Fitness
+							</h2>
+
+							<p className="font-bold text-gray-800 text-lg mt-10">
+								Khu 2, Đ. 3/2, P. Xuân Khánh, Q. Ninh Kiều, TP. Cần Thơ
+							</p>
+						</div>
+					</div>
+					<div>
+						<h4 className="text-primary font-semibold text-2xl uppercase mt-8 mb-4">
+							Giờ tập luyện
+						</h4>
+						<div>
+							<div className="mb-1">
+								<span className="font-bold text-gray-800">
+									M / T / W / TH / F:
+								</span>
+								<span className="font-light ms-1">4:00 am - 12:00 am</span>
+							</div>
+							<div className="mb-1">
+								<span className="font-bold text-gray-800">Saturday:</span>
+								<span className="font-light ms-1">4:00 am - 10:00 pm</span>
+							</div>
+							<div>
+								<span className="font-bold text-gray-800">Sunday:</span>
+								<span className="font-light ms-1">7:00 am - 4:00 pm</span>
+							</div>
+						</div>
+						<Link
+							href="tel: 02923831530"
+							className="flex justify-center items-center px-4 py-5 mt-10 bg-primary text-white hover:cursor-pointer hover:opacity-85 transition-all w-72"
+						>
+							<PhoneIcon className="size-8 me-5" />
+							<span>0292 3831 530</span>
+						</Link>
+						<Link
+							href="https://maps.app.goo.gl/1sn1YWcGaeydR3og6"
+							className="flex justify-center items-center px-4 py-5 mt-7 mb-3 bg-primary text-white hover:cursor-pointer hover:opacity-85 transition-all w-72"
+						>
+							<MapPinIcon className="size-8 me-5" />
+							<span>Xem trên bản đồ</span>
+						</Link>
+
+						<Link
+							href="mailto:dhctfitness@ctu.edu.vn"
+							className="text-primary font-extrabold text-lg"
+						>
+							dhctfitness@ctu.edu.vn
+						</Link>
+					</div>
+					<div>
+						<h4 className="text-primary font-semibold text-2xl uppercase mt-8 mb-4">
+							Giờ tư vấn
+						</h4>
+						<div>
+							<div className="mb-1">
+								<span className="font-bold text-gray-800">M / T / W / TH:</span>
+								<span className="font-light ms-1">
+									8:00 am - 12:00 pm, 4:00 pm - 8:00 pm
+								</span>
+							</div>
+							<div className="mb-1">
+								<span className="font-bold text-gray-800">F / SA:</span>
+								<span className="font-light ms-1">8:00 am - 12:00 pm</span>
+							</div>
+							<div>
+								<span className="font-bold text-gray-800">Sunday:</span>
+								<span className="font-light ms-1">Đóng cửa</span>
+							</div>
+						</div>
+						<Link
+							href="tel: 0292834765"
+							className="flex justify-center items-center px-4 py-5 mt-10 bg-primary text-white hover:cursor-pointer hover:opacity-85 transition-all w-72"
+						>
+							<PhoneIcon className="size-8 me-5" />
+							<span>0292 834 765</span>
+						</Link>
+					</div>
+				</div>
+			</PrimarySection>
+			<SecondarySection bgImage="bg-section-secondary">
+				<h2 className="uppercase text-white text-4xl font-bold text-center">
+					Don&apos;t <span className="text-primary">think</span>, begin{" "}
+					<span className="text-primary">today!</span>
+				</h2>
+				<p className="text-white text-center max-w-[800px] my-7">
+					Chỉ ᴄó những người kỷ luật mới thực ѕự ᴄó đượᴄ tự do. Nếu bạn không ᴄó
+					kỷ luật, bạn ѕẽ tự biến mình thành nô lệ cho tâm trạng, cho đam mê của
+					mình.
+				</p>
+				<Link href="/register-member">
+					<Button className="bg-primary hover:scale-105 transition-all">
+						Tham gia ngay
+					</Button>
+				</Link>
+			</SecondarySection>
+			<PrimarySection
+				title={
+					<>
 						Vì sao là <span className="text-primary">CTU Fitness</span>
 					</>
 				}
-				// desc="Training Studio is free CSS template for gyms and fitness centers. You are allowed to use this layout for your business website."
+				desc="Chúng tôi luôn nỗ lực truyền tải những kiến thức đúng và đủ để khách hàng có thể áp dụng và hình thành một lối sống khỏe không chỉ giới hạn trong phạm vi tập luyện."
 			>
 				<div className="grid grid-cols-2 gap-9 lg:grid-cols-4 mt-10 lg:gap-12 lg:mt-16">
 					<BenefitItem image="/images/icons/24-hours.png" title="Mở cửa 24/7" />
@@ -71,11 +168,11 @@ export default function Home() {
 					<span className="text-primary">today!</span>
 				</h2>
 				<p className="text-white text-center max-w-[800px] my-7">
-					Ut consectetur, metus sit amet aliquet placerat, enim est ultricies
-					ligula, sit amet dapibus odio augue eget libero. Morbi tempus mauris a
-					nisi luctus imperdiet.
+					Chỉ ᴄó những người kỷ luật mới thực ѕự ᴄó đượᴄ tự do. Nếu bạn không ᴄó
+					kỷ luật, bạn ѕẽ tự biến mình thành nô lệ cho tâm trạng, cho đam mê của
+					mình.
 				</p>
-				<Link href="/signup">
+				<Link href="/register-member">
 					<Button className="bg-primary hover:scale-105 transition-all">
 						Tham gia ngay
 					</Button>
@@ -88,6 +185,7 @@ export default function Home() {
 					</>
 				}
 				desc="Kéo tạ kéo sức hút. Đánh thức sự tự tin trong bạn"
+				s
 			>
 				<div className="grid grid-cols-1 gap-y-16 mt-10 lg:mt-16">
 					<IntroduceItem
@@ -119,12 +217,12 @@ export default function Home() {
 					<span className="text-primary">today!</span>
 				</h2>
 				<p className="text-white text-center max-w-[800px] my-7">
-					Ut consectetur, metus sit amet aliquet placerat, enim est ultricies
-					ligula, sit amet dapibus odio augue eget libero. Morbi tempus mauris a
-					nisi luctus imperdiet.
+					Chỉ ᴄó những người kỷ luật mới thực ѕự ᴄó đượᴄ tự do. Nếu bạn không ᴄó
+					kỷ luật, bạn ѕẽ tự biến mình thành nô lệ cho tâm trạng, cho đam mê của
+					mình.
 				</p>
 
-				<Link href="/signup">
+				<Link href="/register-member">
 					<Button className="bg-primary hover:scale-105 transition-all">
 						Tham gia ngay
 					</Button>
