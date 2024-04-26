@@ -81,11 +81,7 @@ function TopHeader({ textLink, href, className }) {
 							Hồ sơ
 						</Link>
 						<hr />
-						<Button
-							onClick={() => signOut()}
-							color="deep-orange"
-							className="mt-3"
-						>
+						<Button onClick={() => signOut()} color="red" className="mt-3">
 							Đăng xuất
 						</Button>
 					</PopoverContent>
