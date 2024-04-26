@@ -255,3 +255,17 @@ model traningsessiononexercise {
   @@id([trainingSessionId, exerciseId])
   @@index([exerciseId], map: "TraningSessionOnExercise_exerciseId_fkey")
 }
+
+model role {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(256)
+  permission      String            @db.VarChar(256)
+  employeeaccount employeeaccount[]
+}
+
+model employeeaccount {
+  username String @id @db.VarChar(20)
+  password String @db.VarChar(256)
+  roleId   Int
+  role     role   @relation(fields: [roleId], references: [id])
+}

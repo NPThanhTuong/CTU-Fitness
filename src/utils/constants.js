@@ -109,3 +109,5 @@ export const navList = [
 		activePath: "membership-packages",
 	},
 ];
+
+export const saltRounds = 10;
