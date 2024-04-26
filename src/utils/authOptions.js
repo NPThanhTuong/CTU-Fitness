@@ -14,15 +14,24 @@ export const authOptions = {
 				},
 				password: { label: "Password", type: "password" },
 			},
-			async authorize(credentials, req) {
+			async authorize(credentials) {
 				const user = await prisma.employeeaccount.findFirst({
 					where: {
 						username: credentials.username,
 					},
+					select: {
+						employee: {
+							select: {
+								avatar: true,
+							},
+						},
+						roleId: true,
+						username: true,
+						password: true,
+					},
 				});
 
 				await prisma.$disconnect();
-
 				if (!user) {
 					return null;
 				}
@@ -32,7 +41,10 @@ export const authOptions = {
 					return null;
 				}
 
-				return user;
+				return {
+					name: user.username,
+					image: user.employee.avatar,
+				};
 			},
 		}),
 	],

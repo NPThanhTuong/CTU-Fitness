@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import {
 	Avatar,
+	Button,
 	IconButton,
 	Popover,
 	PopoverContent,
@@ -17,6 +18,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import AsideNav from "@/components/Admin/AsideNav";
+import { signOut, useSession } from "next-auth/react";
 
 function TopHeader({ textLink, href, className }) {
 	const [open, setOpen] = useState(false);
@@ -28,6 +30,9 @@ function TopHeader({ textLink, href, className }) {
 		onMouseLeave: () => setOpenPopover(false),
 	};
 
+	const { data: session } = useSession({
+		required: true,
+	});
 	return (
 		<div className={className}>
 			<AsideNav open={open} closeDrawer={() => setOpen(false)} />
@@ -63,7 +68,7 @@ function TopHeader({ textLink, href, className }) {
 					placement="bottom-start"
 				>
 					<PopoverHandler {...triggers}>
-						<Avatar src="/images/third-trainer.jpg" size="sm" />
+						<Avatar src={`/images/${session?.user?.image}`} size="sm" />
 					</PopoverHandler>
 					<PopoverContent
 						{...triggers}
@@ -76,12 +81,13 @@ function TopHeader({ textLink, href, className }) {
 							Hồ sơ
 						</Link>
 						<hr />
-						<Link
-							className="block py-2 px-3 hover:bg-primary/10 outline-none"
-							href="/admin/logout"
+						<Button
+							onClick={() => signOut()}
+							color="deep-orange"
+							className="mt-3"
 						>
 							Đăng xuất
-						</Link>
+						</Button>
 					</PopoverContent>
 				</Popover>
 			</div>
