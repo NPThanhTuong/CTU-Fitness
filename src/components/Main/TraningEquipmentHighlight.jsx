@@ -1,40 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import LightGallery from "lightgallery/react";
+
+// import styles
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+
+// If you want you can use SCSS instead of css
+import "lightgallery/scss/lightgallery.scss";
+import "lightgallery/scss/lg-zoom.scss";
+
+// import plugins if you need
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgVideo from "lightgallery/plugins/video";
+
 import TraningEquipmentItem from "./TraningEquipmentItem";
+import { highlightImages } from "@/utils/constants";
+import { twMerge } from "tailwind-merge";
 
 function TraningEquipmentHighlight({ className }) {
-	const [equipment, setEquipment] = useState([]);
-
-	useEffect(() => {
-		const getHighlightEquipment = async () => {
-			const res = await fetch("/api/highlight-equipment?id=3&id=7&id=11", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
-			const data = await res.json();
-			setEquipment(data);
-		};
-
-		getHighlightEquipment();
-	}, []);
-
-	return (
-		<div className={className}>
-			{equipment.map((item) => (
-				<TraningEquipmentItem
-					key={item.id}
-					id={item.id}
-					title={item.name}
-					image={item.equipmentimage[0].pathName}
-					muscles={item.equipmentonmuscle}
-				/>
-			))}
-		</div>
-	);
+  return (
+    <div className={twMerge("mt-8", className)}>
+      <LightGallery
+        plugins={[lgZoom, lgThumbnail]}
+        mode="lg-fade"
+        elementClassNames="flex gap-4 flex-wrap justify-center"
+      >
+        {highlightImages.map((item, index) => (
+          <a
+            key={index}
+            className="gallery-item"
+            data-src={item.path}
+            data-sub-html={item.title}
+          >
+            <img
+              className="img-responsive h-96 rounded-sm"
+              src={item.path}
+              alt="Highlight image"
+            />
+          </a>
+        ))}
+      </LightGallery>
+    </div>
+  );
 }
 
 export default TraningEquipmentHighlight;
