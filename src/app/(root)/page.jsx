@@ -13,7 +13,7 @@ import { MapPinIcon, PhoneIcon } from "@heroicons/react/24/solid";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="min-h-screen">
       <IntroduceSection />
       <PrimarySection
         title={
@@ -237,147 +237,6 @@ export default function Home() {
         }
         desc="Không đầu tư vào sự hào nhoáng, chúng tôi chú trọng đầu tư vào những loại máy tập chuyên dụng mang lại hiệu quả cao nhất cho khách hàng"
       >
-        {/* <ul className="grid grid-cols-1 gap-9 lg:grid-cols-2 mt-10 lg:gap-12 lg:mt-16">
-					<li className="flex items-center">
-						<Image
-							src="/images/features-first-icon.png"
-							width={100}
-							height={100}
-							alt="Features image"
-							className="mr-5"
-						/>
-						<div className="flex-1 text-left">
-							<h3 className="text-xl text-gray-800 font-bold">Basic Fitness</h3>
-							<p className="text-sm text-gray-600">
-								Please do not re-distribute this template ZIP file on any
-								template collection website. This is not allowed.
-							</p>
-							<Link
-								href="/program/detail/id"
-								className="uppercase text-primary text-sm font-semibold"
-							>
-								Khám phá thêm
-							</Link>
-						</div>
-					</li>
-					<li className="flex items-center">
-						<Image
-							src="/images/features-first-icon.png"
-							width={100}
-							height={100}
-							alt="Features image"
-							className="mr-5"
-						/>
-						<div className="flex-1 text-left">
-							<h3 className="text-xl text-gray-800 font-bold">
-								Advanced Muscle Course
-							</h3>
-							<p className="text-sm text-gray-600">
-								You may want to browse through Digital Marketing or Corporate
-								HTML CSS templates on our website.
-							</p>
-							<Link
-								href="/program/detail/id"
-								className="uppercase text-primary text-sm font-semibold"
-							>
-								Khám phá thêm
-							</Link>
-						</div>
-					</li>
-					<li className="flex items-center">
-						<Image
-							src="/images/features-first-icon.png"
-							width={100}
-							height={100}
-							alt="Features image"
-							className="mr-5"
-						/>
-						<div className="flex-1 text-left">
-							<h3 className="text-xl text-gray-800 font-bold">Basic Fitness</h3>
-							<p className="text-sm text-gray-600">
-								Please do not re-distribute this template ZIP file on any
-								template collection website. This is not allowed.
-							</p>
-							<Link
-								href="/program/detail/id"
-								className="uppercase text-primary text-sm font-semibold"
-							>
-								Khám phá thêm
-							</Link>
-						</div>
-					</li>
-					<li className="flex items-center">
-						<Image
-							src="/images/features-first-icon.png"
-							width={100}
-							height={100}
-							alt="Features image"
-							className="mr-5"
-						/>
-						<div className="flex-1 text-left">
-							<h3 className="text-xl text-gray-800 font-bold">
-								Advanced Muscle Course
-							</h3>
-							<p className="text-sm text-gray-600">
-								You may want to browse through Digital Marketing or Corporate
-								HTML CSS templates on our website.
-							</p>
-							<Link
-								href="/program/detail/id"
-								className="uppercase text-primary text-sm font-semibold"
-							>
-								Khám phá thêm
-							</Link>
-						</div>
-					</li>
-					<li className="flex items-center">
-						<Image
-							src="/images/features-first-icon.png"
-							width={100}
-							height={100}
-							alt="Features image"
-							className="mr-5"
-						/>
-						<div className="flex-1 text-left">
-							<h3 className="text-xl text-gray-800 font-bold">Basic Fitness</h3>
-							<p className="text-sm text-gray-600">
-								Please do not re-distribute this template ZIP file on any
-								template collection website. This is not allowed.
-							</p>
-							<Link
-								href="/program/detail/id"
-								className="uppercase text-primary text-sm font-semibold"
-							>
-								Khám phá thêm
-							</Link>
-						</div>
-					</li>
-					<li className="flex items-center">
-						<Image
-							src="/images/features-first-icon.png"
-							width={100}
-							height={100}
-							alt="Features image"
-							className="mr-5"
-						/>
-						<div className="flex-1 text-left">
-							<h3 className="text-xl text-gray-800 font-bold">
-								Advanced Muscle Course
-							</h3>
-							<p className="text-sm text-gray-600">
-								You may want to browse through Digital Marketing or Corporate
-								HTML CSS templates on our website.
-							</p>
-							<Link
-								href="/program/detail/id"
-								className="uppercase text-primary text-sm font-semibold"
-							>
-								Khám phá thêm
-							</Link>
-						</div>
-					</li>
-				</ul> */}
-
         <div className="grid grid-cols-1 gap-4 mt-12 lg:grid-cols-2">
           <Image
             src="/images/ktpgym15.jpg"
@@ -426,6 +285,7 @@ export default function Home() {
         </h2>
         <ServiceTabs className="mt-12" />
       </SecondarySection>
+
       <PrimarySection
         title={
           <>

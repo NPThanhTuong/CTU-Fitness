@@ -138,3 +138,37 @@ export const highlightImages = [
     title: "<h4>Hình ảnh - <a href='/' >CTU Fitness</a></h4>",
   },
 ];
+
+export const equipmentSort = [
+  // {
+  //   value: "id",
+  //   title: "Mã thiết bị",
+  // },
+  {
+    value: "name",
+    title: "Tên thiết bị",
+  },
+  {
+    value: "dateImported",
+    title: "Ngày nhập",
+  },
+];
+
+export const trainerSort = [
+  // {
+  //   value: "id",
+  //   title: "Mã huấn luyện viên",
+  // },
+  {
+    value: "name",
+    title: "Tên huấn luyện viên",
+  },
+  {
+    value: "experience",
+    title: "Kinh nghiệm huấn luyện",
+  },
+  {
+    value: "age",
+    title: "Tuổi huấn luyện viên",
+  },
+];
