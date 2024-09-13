@@ -1,42 +1,81 @@
 "use client";
 
-import Button from "@/components/Button";
 import CardItem from "@/components/CardItem";
-import { Breadcrumbs, Carousel, IconButton } from "@/components/midleExport";
-import { ArrowLeftIcon, ArrowRightIcon } from "@/icons";
+import { Breadcrumbs } from "@/components/midleExport";
 import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BallTriangle } from "react-loader-spinner";
+import FullCalendar from "@fullcalendar/react"; // FullCalendar component
+import dayGridPlugin from "@fullcalendar/daygrid"; // For month/week/day views
+import timeGridPlugin from "@fullcalendar/timegrid"; // For time grid view
+import interactionPlugin from "@fullcalendar/interaction";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 function DetailTrainerPage({ params }) {
   const { trainerId } = params;
   const [trainerMission, setTrainer] = useState();
   const [relatedTrainers, setRelatedTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentMission, setCurrentMission] = useState({});
+  const [events, setEvents] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const getTrainer = async () => {
       setLoading(true);
 
-      const resTrainer = await axiosInstance.get(`/trainer/${trainerId}`);
-      const trainer = resTrainer.data;
+      try {
+        const resTrainer = await axiosInstance.get(`/trainer/${trainerId}`);
 
-      const resRelatedTrainers = await axiosInstance.get(
-        `/trainer/${trainerId}/related`
-      );
-      const { data: relatedTrainers } = await resRelatedTrainers.data;
+        const trainer = resTrainer.data;
 
-      console.log({ check: relatedTrainers });
-      setLoading(false);
-      setTrainer(trainer);
-      setRelatedTrainers(relatedTrainers);
+        const resRelatedTrainers = await axiosInstance.get(
+          `/trainer/${trainerId}/related`
+        );
+        const { data: relatedTrainers } = await resRelatedTrainers.data;
+
+        setLoading(false);
+        setTrainer(trainer);
+        setRelatedTrainers(relatedTrainers);
+      } catch (error) {
+        console.log(error);
+        router.push("/not-found");
+        return;
+      }
+    };
+
+    const getReservations = async () => {
+      try {
+        const res = await axiosInstance.get(
+          `/trainer/${trainerId}/trainining-sessions`
+        );
+
+        const trainingSessions = res.data;
+
+        const handledTrainingSession = trainingSessions.map((item) => ({
+          id: item.id,
+          start: new Date(item.startTime),
+          end: new Date(item.endTime),
+          title: item.trainingProgram.name,
+          backgroundColor: item.reservations.length > 0 ? "#FA4659" : "#2EB872",
+          extendedProps: {
+            isReserved: item.reservations.length > 0,
+          },
+        }));
+
+        setEvents(handledTrainingSession);
+      } catch (error) {
+        console.error(error);
+        router.push("/not-found");
+        return;
+      }
     };
 
     getTrainer();
-  }, []);
+    getReservations();
+  }, [trainerId]);
 
   const getCurrentMission = (missions) => {
     return missions?.reduce((latest, current) => {
@@ -46,6 +85,60 @@ function DetailTrainerPage({ params }) {
       return currentDate > latestDate ? current : latest;
     });
   };
+
+  const handleEventReservation = async (clickInfo) => {
+    const isReserved = clickInfo.event.extendedProps.isReserved;
+    if (isReserved) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Lịch tập luyện đã được đặt!",
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "bg-primary",
+        },
+      });
+    } else {
+      // try{
+      //   const res = await axiosInstance.post("/customer/reservation", {})
+      // }
+      Swal.fire({
+        icon: "success",
+        title: "Chúc mừng!",
+        text: "Bạn đã đặt lịch tập luyện thành công!",
+        customClass: {
+          confirmButton: "bg-primary",
+        },
+      });
+    }
+    // if (
+    //   confirm(
+    //     `Are you sure you want to delete the event '${clickInfo.event.title}'`
+    //   )
+    // ) {
+    //   setEvents(events.filter((event) => event.id !== clickInfo.event.id));
+    //   clickInfo.event.remove(); // Remove the event from the calendar
+    // }
+  };
+
+  if (loading)
+    return (
+      <div>
+        <div className="h-[80px] bg-[#27313b]"></div>
+        <div className="min-h-screen flex justify-center items-center flex-col">
+          <BallTriangle
+            height={100}
+            width={100}
+            radius={5}
+            color="#ed563b"
+            wrapperClass=""
+          />
+          <p className="text-2xl text-center text-gray-500 font-bold mt-6">
+            Đang tải....
+          </p>
+        </div>
+      </div>
+    );
 
   return (
     <main>
@@ -64,69 +157,15 @@ function DetailTrainerPage({ params }) {
         </Breadcrumbs>
 
         <div className="bg-white shadow-lg px-6 py-8 rounded-lg mt-8">
-          {loading ? (
-            <div>
-              <BallTriangle
-                height={100}
-                width={100}
-                radius={5}
-                color="#ed563b"
-                wrapperClass="flex justify-center"
-              />
-              <p className="text-2xl text-center text-gray-500 font-bold mt-6">
-                Đang tải....
-              </p>
-            </div>
-          ) : trainerMission ? (
+          {trainerMission ? (
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              {/* <Carousel
-                loop
-                className="rounded-lg"
-                prevArrow={({ handlePrev }) => (
-                  <IconButton
-                    variant="text"
-                    color="white"
-                    size="lg"
-                    onClick={handlePrev}
-                    className="!absolute top-2/4 left-4 -translate-y-2/4"
-                  >
-                    <ArrowLeftIcon width="2rem" height="2rem" />
-                  </IconButton>
-                )}
-                nextArrow={({ handleNext }) => (
-                  <IconButton
-                    variant="text"
-                    color="white"
-                    size="lg"
-                    onClick={handleNext}
-                    className="!absolute top-2/4 !right-4 -translate-y-2/4"
-                  >
-                    <ArrowRightIcon width="2rem" height="2rem" />
-                  </IconButton>
-                )}
-                navigation={({ setActiveIndex, activeIndex, length }) => (
-                  <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
-                    {new Array(length).fill("").map((_, i) => (
-                      <span
-                        key={i}
-                        className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                          activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
-                        }`}
-                        onClick={() => setActiveIndex(i)}
-                      />
-                    ))}
-                  </div>
-                )}
-              > */}
               <Image
                 src={`/images/${trainerMission.employee.account.avatar}`}
                 alt="Avatar huấn luyện viên"
                 width={1000}
-                height={1000}
-                className="h-full w-full object-cover rounded-md"
+                height={1100}
+                className="w-full h-[600px] object-cover rounded-md"
               />
-              {/* </Carousel> */}
-
               <div className="mt-4">
                 <h3 className="font-bold text-3xl">
                   {trainerMission.employee.name}
@@ -167,9 +206,12 @@ function DetailTrainerPage({ params }) {
                 </div>
 
                 <div className="flex justify-center lg:justify-start">
-                  <Button className="bg-primary hover:scale-105 mt-5">
+                  <Link
+                    href="#reservation-section"
+                    className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:scale-105 mt-5 transition-all"
+                  >
                     Đặt lịch ngay
-                  </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -179,23 +221,38 @@ function DetailTrainerPage({ params }) {
             </p>
           )}
         </div>
-        <h4 className="text-3xl font-bold mt-12">Lịch huấn luyện</h4>
+        <h4 id="reservation-section" className="text-3xl font-bold mt-12 mb-8">
+          Lịch huấn luyện
+        </h4>
+        <div>
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            initialView="timeGridWeek" // Default view (week with times)
+            selectable={true}
+            events={events} // Array of events
+            // select={handleDateSelect} // Callback for when a date is selected
+            validRange={{
+              start: new Date().toISOString().split("T")[0], // Limit start date to today
+            }}
+            timeZone="Asia/Ho_Chi_Minh"
+            locale="vi"
+            eventClick={handleEventReservation} // Handle event click
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "timeGridWeek,timeGridDay",
+            }}
+            buttonText={{
+              today: "Hôm nay",
+              week: "Tuần",
+              day: "Ngày",
+            }}
+            height={600}
+          />
+        </div>
 
         <h4 className="text-3xl font-bold mt-12">Huấn luyện viên liên quan</h4>
-        {loading ? (
-          <div>
-            <BallTriangle
-              height={100}
-              width={100}
-              radius={5}
-              color="#ed563b"
-              wrapperClass="flex justify-center"
-            />
-            <p className="text-2xl text-center text-gray-500 font-bold mt-6">
-              Đang tải....
-            </p>
-          </div>
-        ) : relatedTrainers.length > 0 ? (
+        {relatedTrainers.length > 0 ? (
           <>
             {/* Mobile */}
             <div className="w-full flex gap-4 snap-x overflow-x-auto pb-9 mt-4 lg:hidden">
@@ -238,7 +295,6 @@ function DetailTrainerPage({ params }) {
             <div className="hidden lg:grid lg:gap-4 lg:grid-cols-4 lg:mt-4">
               {relatedTrainers.map((item) => {
                 const currentMission = getCurrentMission(item.missions);
-                console.log(item);
                 return (
                   <CardItem
                     key={item.id}

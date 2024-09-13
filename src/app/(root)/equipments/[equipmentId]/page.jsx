@@ -7,6 +7,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@/icons";
 import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BallTriangle } from "react-loader-spinner";
 
@@ -15,26 +16,53 @@ function DetailEquipmentPage({ params }) {
   const [equipment, setEquipment] = useState();
   const [relatedEquipments, setRelatedEquipments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const getEquipment = async () => {
       setLoading(true);
+      try {
+        const resEquipment = await axiosInstance.get(
+          `/equipment/${equipmentId}`
+        );
+        const equipment = resEquipment.data;
 
-      const resEquipment = await axiosInstance.get(`/equipment/${equipmentId}`);
-      const equipment = resEquipment.data;
+        const resRelatedEquipment = await axiosInstance.get(
+          `/equipment/${equipmentId}/related`
+        );
+        const { data: relatedEquipments } = await resRelatedEquipment.data;
 
-      const resRelatedEquipment = await axiosInstance.get(
-        `/equipment/${equipmentId}/related`
-      );
-      const { data: relatedEquipments } = await resRelatedEquipment.data;
-
-      setLoading(false);
-      setEquipment(equipment);
-      setRelatedEquipments(relatedEquipments);
+        setLoading(false);
+        setEquipment(equipment);
+        setRelatedEquipments(relatedEquipments);
+      } catch (error) {
+        console.log(error);
+        router.push("/not-found");
+        return;
+      }
     };
 
     getEquipment();
-  }, []);
+  }, [equipmentId]);
+
+  if (loading)
+    return (
+      <div>
+        <div className="h-[80px] bg-[#27313b]"></div>
+        <div className="min-h-screen flex justify-center items-center flex-col">
+          <BallTriangle
+            height={100}
+            width={100}
+            radius={5}
+            color="#ed563b"
+            wrapperClass=""
+          />
+          <p className="text-2xl text-center text-gray-500 font-bold mt-6">
+            Đang tải....
+          </p>
+        </div>
+      </div>
+    );
 
   return (
     <main>
@@ -51,20 +79,7 @@ function DetailEquipmentPage({ params }) {
         </Breadcrumbs>
 
         <div className="bg-white shadow-lg px-6 py-8 rounded-lg mt-8">
-          {loading ? (
-            <div>
-              <BallTriangle
-                height={100}
-                width={100}
-                radius={5}
-                color="#ed563b"
-                wrapperClass="flex justify-center"
-              />
-              <p className="text-2xl text-center text-gray-500 font-bold mt-6">
-                Đang tải....
-              </p>
-            </div>
-          ) : equipment ? (
+          {equipment ? (
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <Carousel
                 loop
@@ -185,22 +200,8 @@ function DetailEquipmentPage({ params }) {
             </p>
           )}
         </div>
-        {/* <div className="bg-white shadow-lg p-6 rounded-lg mt-8 lg:p-8"> */}
         <h4 className="text-3xl font-bold mt-12">Thiết bị liên quan</h4>
-        {loading ? (
-          <div>
-              <BallTriangle
-                height={100}
-                width={100}
-                radius={5}
-                color="#ed563b"
-                wrapperClass="flex justify-center"
-              />
-              <p className="text-2xl text-center text-gray-500 font-bold mt-6">
-                Đang tải....
-              </p>
-            </div>
-        ) : relatedEquipments.length > 0 ? (
+        {relatedEquipments.length > 0 ? (
           <>
             {/* Mobile */}
             <div className="w-full flex gap-4 snap-x overflow-x-auto pb-9 mt-4 lg:hidden">
@@ -256,7 +257,6 @@ function DetailEquipmentPage({ params }) {
             Không tìm thấy thiết bị liên quan.
           </p>
         )}
-        {/* </div> */}
       </div>
     </main>
   );

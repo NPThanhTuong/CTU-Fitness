@@ -1,26 +1,19 @@
-"use client";
-
-import { useState } from "react";
-import HashLoader from "react-spinners/HashLoader";
+import { sessionToken } from "@/utils/constants";
+import { cookies } from "next/headers";
 
 function TestPage() {
-  let [loading, setLoading] = useState(true);
-  let [color, setColor] = useState("#ed563b");
+  const cookieStore = cookies(); // Access cookies
+  const jwtToken = cookieStore.get(sessionToken)?.value;
+
+  if (!jwtToken) {
+    // Redirect or handle unauthenticated access
+    return <p>You need to log in first.</p>;
+  }
 
   return (
-    <div className="mt-32">
-      <button onClick={() => setLoading(!loading)}>Toggle Loader</button>
-      <input
-        value={color}
-        onChange={(input) => setColor(input.target.value)}
-        placeholder="Color of the loader"
-      />
-
-      <HashLoader
-        color={color}
-        loading={loading}
-        size={150}
-      />
+    <div>
+      <h1>Protected Dashboard</h1>
+      <p>JWT Token (Server-Side): {jwtToken}</p>
     </div>
   );
 }

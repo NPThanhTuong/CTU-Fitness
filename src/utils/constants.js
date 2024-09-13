@@ -1,3 +1,5 @@
+import { TokenExpiredError } from "jsonwebtoken";
+
 export const webPaths = [
   {
     name: "Trang chủ",
@@ -24,11 +26,11 @@ export const webPaths = [
     path: "/contact",
     isButton: false,
   },
-  {
-    name: "Đăng ký",
-    path: "/signup",
-    isButton: true,
-  },
+  // {
+  //   name: "Đăng nhập",
+  //   path: "/signin",
+  //   isButton: true,
+  // },
 ];
 
 export const expSort = [
@@ -172,3 +174,21 @@ export const trainerSort = [
     title: "Tuổi huấn luyện viên",
   },
 ];
+
+export const sessionToken = "sessionToken"; 
+export const sessionTokenMaxAge = 10 * 24 * 60 * 60; 
+
+export const claimNameType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+export const claimEmailType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+export const claimRoleType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+
+
+export const adminRole = "Administrator";
+export const personnelRole = "Personnel";
+export const trainerRole = "Trainer";
+export const userRole = "User";
+
+export const expiredJwtTokenCode = 900;
+export const invalidJwtTokenCode = 999;
+export const otherErrorJwtTokenCode = 666;
+

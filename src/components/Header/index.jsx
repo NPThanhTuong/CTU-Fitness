@@ -8,7 +8,7 @@ import NavList from "./NavList";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 
-function Header() {
+function Header({authToken}) {
   const [openNav, setOpenNav] = useState(false);
   const [isScrollDown, setIsScrollDown] = useState(false);
 
@@ -51,6 +51,7 @@ function Header() {
           {/* Desktop */}
           <NavList
             key="desktop_list"
+            cookie={authToken}
             className={twMerge(
               "hidden lg:flex lg:flex-row lg:justify-end lg:items-center lg:h-full lg:font-semibold lg:text-xs",
               isScrollDown ? "text-gray-800" : "text-white"
@@ -73,6 +74,7 @@ function Header() {
           <Card>
             <NavList
               key="mobile_list"
+              cookie={authToken}
               className={twMerge(
                 "text-xs font-semibold",
                 isScrollDown ? "text-gray-800" : "text-white"
