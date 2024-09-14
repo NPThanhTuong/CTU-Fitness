@@ -486,6 +486,7 @@ export async function deleteRegisterForm(formData) {
   console.log(formData);
 }
 
+// NEW v2.0
 export async function login(prevState, formData) {
   const email = formData.get("email");
   const password = formData.get("password");

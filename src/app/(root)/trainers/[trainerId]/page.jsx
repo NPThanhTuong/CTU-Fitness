@@ -11,8 +11,13 @@ import FullCalendar from "@fullcalendar/react"; // FullCalendar component
 import dayGridPlugin from "@fullcalendar/daygrid"; // For month/week/day views
 import timeGridPlugin from "@fullcalendar/timegrid"; // For time grid view
 import interactionPlugin from "@fullcalendar/interaction";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { checkAuth } from "@/lib/session";
+
+const occupiedReservationColor = "#FA4659";
+const availableReservationColor = "#2EB872";
+const ownedReservationColor = "#4D96FF";
 
 function DetailTrainerPage({ params }) {
   const { trainerId } = params;
@@ -20,6 +25,8 @@ function DetailTrainerPage({ params }) {
   const [relatedTrainers, setRelatedTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
+  const [authResult, setAuthResult] = useState();
+  const pathName = usePathname();
   const router = useRouter();
 
   useEffect(() => {
@@ -59,9 +66,13 @@ function DetailTrainerPage({ params }) {
           start: new Date(item.startTime),
           end: new Date(item.endTime),
           title: item.trainingProgram.name,
-          backgroundColor: item.reservations.length > 0 ? "#FA4659" : "#2EB872",
+          backgroundColor:
+            item.reservations.length > 0
+              ? occupiedReservationColor
+              : availableReservationColor,
           extendedProps: {
             isReserved: item.reservations.length > 0,
+            isOwned: false,
           },
         }));
 
@@ -73,8 +84,58 @@ function DetailTrainerPage({ params }) {
       }
     };
 
+    const handleAuth = async () => {
+      try {
+        const authResult = await checkAuth();
+        setAuthResult(authResult);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const getUserReservation = async () => {
+      try {
+        const authResult = await checkAuth();
+
+        if (!authResult.isAuth) {
+          return;
+        }
+
+        const resUserReservations = await axiosInstance.get(
+          `/customer/reservations`,
+          {
+            headers: {
+              Authorization: `Bearer ${authResult.user.token}`,
+            },
+          }
+        );
+
+        const userReservation = resUserReservations.data;
+
+        const handledUserReservation = userReservation.reservations.map(
+          ({ trainingSession: item }) => ({
+            id: item.id,
+            start: new Date(item.startTime),
+            end: new Date(item.endTime),
+            title: `(Bạn đã đặt) ${item.trainingProgram.name}`,
+            backgroundColor: ownedReservationColor,
+            extendedProps: {
+              isReserved: true,
+              isOwned: true,
+            },
+          })
+        );
+
+        setEvents((prev) => [...prev, ...handledUserReservation]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    handleAuth();
     getTrainer();
     getReservations();
+    getUserReservation();
   }, [trainerId]);
 
   const getCurrentMission = (missions) => {
@@ -88,37 +149,150 @@ function DetailTrainerPage({ params }) {
 
   const handleEventReservation = async (clickInfo) => {
     const isReserved = clickInfo.event.extendedProps.isReserved;
-    if (isReserved) {
+    const isOwned = clickInfo.event.extendedProps.isOwned;
+    const trainingSessionId = parseInt(clickInfo.event.id);
+
+    if (!authResult?.isAuth) {
+      const result = await Swal.fire({
+        icon: "warning",
+        title: "Thất bại",
+        text: "Bạn phải đăng nhập trước khi thực hiện đặt lịch!",
+        showConfirmButton: true,
+        confirmButtonText: "Đăng nhập",
+        showCancelButton: true,
+        cancelButtonText: "Hủy",
+        customClass: {
+          confirmButton: "bg-primary",
+          cancelButton: "bg-gray-400",
+        },
+      });
+
+      if (result.isConfirmed) {
+        return router.push(`/signin?returnUrl=${pathName}`);
+      }
+    }
+
+    if (isOwned) {
+      try {
+        const result = await Swal.fire({
+          icon: "warning",
+          title: "Hủy lịch",
+          text: "Bạn có chắc chắn muốn hủy lịch đặt không?",
+          showConfirmButton: true,
+          confirmButtonText: "Xác nhận",
+          showCancelButton: true,
+          cancelButtonText: "Hủy",
+          customClass: {
+            confirmButton: "bg-red-500",
+            cancelButton: "bg-gray-400",
+          },
+        });
+
+        if (result.isConfirmed) {
+          const res = await axiosInstance.delete(
+            `/customer/trainingSession/${trainingSessionId}/reservation`,
+            {
+              headers: {
+                Authorization: `Bearer ${authResult.user.token}`,
+              },
+            }
+          );
+
+          clickInfo.event.setProp("backgroundColor", availableReservationColor);
+          clickInfo.event.setExtendedProp("isReserved", false);
+          clickInfo.event.setExtendedProp("isOwned", false);
+
+          // setEvents((prev) => [
+          //   ...prev,
+          //   {
+          //     ...clickInfo.event,
+          //     isOwned: false,
+          //     isReserved: false,
+          //     backgroundColor: availableReservationColor,
+          //   },
+          // ]);
+
+          Swal.fire({
+            icon: "success",
+            title: "Thành công",
+            text: "Bạn đã hủy đặt lịch thành công",
+            customClass: {
+              confirmButton: "bg-primary",
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isReserved) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Lịch tập luyện đã được đặt!",
+        text: "Lịch tập luyện đã được đặt bởi người khác!",
         confirmButtonText: "Ok",
         customClass: {
           confirmButton: "bg-primary",
         },
       });
     } else {
-      // try{
-      //   const res = await axiosInstance.post("/customer/reservation", {})
-      // }
-      Swal.fire({
-        icon: "success",
-        title: "Chúc mừng!",
-        text: "Bạn đã đặt lịch tập luyện thành công!",
-        customClass: {
-          confirmButton: "bg-primary",
-        },
-      });
+      try {
+        const result = await Swal.fire({
+          icon: "info",
+          title: "Đặt lịch",
+          text: "Bạn có chắc chắn muốn đặt lịch không?",
+          showConfirmButton: true,
+          confirmButtonText: "Xác nhận",
+          showCancelButton: true,
+          cancelButtonText: "Hủy",
+          customClass: {
+            confirmButton: "bg-primary",
+            cancelButton: "bg-gray-400",
+          },
+        });
+
+        if (result.isConfirmed) {
+          const res = await axiosInstance.post(
+            "/customer/reservation",
+            {
+              customerId: parseInt(authResult.user.customerId),
+              trainingSessionId,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${authResult.user.token}`,
+              },
+            }
+          );
+
+          clickInfo.event.setProp("backgroundColor", ownedReservationColor);
+          clickInfo.event.setExtendedProp("isReserved", true);
+          clickInfo.event.setExtendedProp("isOwned", true);
+
+          // setEvents((prev) => [
+          //   ...prev,
+          //   {
+          //     ...clickInfo.event,
+          //     backgroundColor: ownedReservationColor,
+          //     extendedProps: {
+          //       isReserved: true,
+          //       isOwned: true,
+          //     },
+          //   },
+          // ]);
+
+          Swal.fire({
+            icon: "success",
+            title: "Thành công",
+            text: "Bạn đã đặt lịch thành công",
+            customClass: {
+              confirmButton: "bg-primary",
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-    // if (
-    //   confirm(
-    //     `Are you sure you want to delete the event '${clickInfo.event.title}'`
-    //   )
-    // ) {
-    //   setEvents(events.filter((event) => event.id !== clickInfo.event.id));
-    //   clickInfo.event.remove(); // Remove the event from the calendar
-    // }
   };
 
   if (loading)
@@ -234,7 +408,7 @@ function DetailTrainerPage({ params }) {
             validRange={{
               start: new Date().toISOString().split("T")[0], // Limit start date to today
             }}
-            timeZone="Asia/Ho_Chi_Minh"
+            // timeZone="Asia/Ho_Chi_Minh"
             locale="vi"
             eventClick={handleEventReservation} // Handle event click
             headerToolbar={{

@@ -111,10 +111,12 @@ export async function checkAuth() {
       isAuth: true,
       user: {
         accountId: decoded["accountId"],
-        avatar: decoded["accountId"],
+        avatar: decoded["avatar"],
         name: decoded[claimNameType],
         email: decoded[claimEmailType],
         role: decoded[claimRoleType],
+        customerId: decoded?.customerId,
+        employeeId: decoded?.employeeId,
         token,
       },
     };
