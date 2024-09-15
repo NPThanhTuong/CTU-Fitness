@@ -13,9 +13,11 @@ import { cookies } from "next/headers";
 import {
   adminRole,
   claimRoleType,
+  noEmployeeCode,
   sessionToken,
   sessionTokenMaxAge,
 } from "./constants";
+import { checkAuth } from "@/lib/session";
 const jwt = require("jsonwebtoken");
 
 export async function createEquipment(formData) {
@@ -432,61 +434,51 @@ export async function deleteEmployee(employeeId) {
   }
 }
 
-export async function registerMember(formData) {
-  console.log(formData);
-  try {
-    const memberPackage = await prisma.membershippackage.findFirst({
-      where: {
-        id: parseInt(formData.get("packId")),
-      },
-      select: {
-        shelfLife: true,
-        price: true,
-      },
-    });
-
-    const registerDate = new Date();
-    const registerExpiryDate = addMonths(registerDate, memberPackage.shelfLife);
-    const registerPrice = memberPackage.price;
-
-    const newCustomer = await prisma.customer.create({
-      data: {
-        fullname: formData.get("fullname"),
-        email: formData.get("email"),
-        phoneNumber: formData.get("phoneNumber"),
-        registerform: {
-          create: {
-            employee: {
-              connect: {
-                id: 3, // 3 là ID của quản trị viên
-              },
-            },
-            membershippackage: {
-              connect: {
-                id: parseInt(formData.get("packId")),
-              },
-            },
-            registerDate: registerDate,
-            registerExpiryDate: registerExpiryDate,
-            registerPrice: registerPrice,
-          },
-        },
-      },
-    });
-    await prisma.$disconnect();
-  } catch (error) {
-    console.log("There was an error: ", error.message);
-    await prisma.$disconnect();
-  }
-
-  redirect("/");
-}
-
 export async function deleteRegisterForm(formData) {
   console.log(formData);
 }
 
 // NEW v2.0
+export async function registerMember(prevState, formData) {
+  const trainerId = parseInt(formData.get("trainerId")) || noEmployeeCode;
+  const packId = parseInt(formData.get("packId"));
+  const description = "Thanh toan dang ky tap";
+  let paymentUrl;
+  const authResult = await checkAuth();
+
+  if (!authResult.isAuth) {
+    redirect("/signin?returnUrl=/register-member");
+  }
+
+  if (!packId) {
+    return { error: "Vui lòng chọn gói thành viên!" };
+  }
+
+  try {
+    const res = await axiosInstance.post(
+      "/registration/payment",
+      {
+        trainerId,
+        membershipTypeId: packId,
+        description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authResult.user.token}`,
+        },
+      }
+    );
+
+    paymentUrl = res.data.paymentUrl;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+
+  if (paymentUrl) redirect(paymentUrl);
+  return;
+}
+
 export async function login(prevState, formData) {
   const email = formData.get("email");
   const password = formData.get("password");

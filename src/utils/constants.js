@@ -175,13 +175,15 @@ export const trainerSort = [
   },
 ];
 
-export const sessionToken = "sessionToken"; 
-export const sessionTokenMaxAge = 10 * 24 * 60 * 60; 
+export const sessionToken = "sessionToken";
+export const sessionTokenMaxAge = 10 * 24 * 60 * 60;
 
-export const claimNameType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
-export const claimEmailType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
-export const claimRoleType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
-
+export const claimNameType =
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+export const claimEmailType =
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+export const claimRoleType =
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
 export const adminRole = "Administrator";
 export const personnelRole = "Personnel";
@@ -192,3 +194,4 @@ export const expiredJwtTokenCode = 900;
 export const invalidJwtTokenCode = 999;
 export const otherErrorJwtTokenCode = 666;
 
+export const noEmployeeCode = 4;

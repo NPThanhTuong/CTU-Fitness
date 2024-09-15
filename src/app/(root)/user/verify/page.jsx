@@ -21,7 +21,6 @@ function UserVerifyPage() {
     const getUserEmail = async () => {
       try {
         const email = await getCookieValue("userEmail");
-        console.log(email);
         setUserEmaill(email);
       } catch (err) {
         console.log(err);
